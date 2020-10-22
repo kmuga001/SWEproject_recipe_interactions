@@ -7,10 +7,6 @@ app.use(express.json());
 app.use(express.static("express"));
 // default URL for website
 
-//dependencies for search
-const csvparser = require('csv-parser')
-const fs = require('fs')
-
 app.get('/response', (req, res) => {
     console.log("hello from server!")
     return res.send({
@@ -24,26 +20,124 @@ app.use('/', function(req,res){
   });
 
 app.get('/search', (req, res) => {
-    console.log("hello from the search server!")
-    //New code for search
-    const dataArray = [];//array storing data set
-    fs.createReadStream('interactions_test.csv')//read stream for file
-    .pipe(csvparser({}))
-    .on('data', (data) => dataArray.push(data))//store all the data in array
-    .on('end', () => {
-        console.log(dataArray[0]);//for now only output first five recipes
-        console.log(dataArray[1]);
-        console.log(dataArray[2]);
-        console.log(dataArray[3]);
-        console.log(dataArray[4]);
-    });
-    return res.send(dataArray);
+    console.debug("hello from the search server!");
+
+    var filePath = './test.csv';
+    var searchArray = new Array();
+    searchArray = csv2array(filePath, ',');
+    console.log(searchArray);
+
+    for(i = 0; i < searchArray.length(); i++){
+        for(j = 0; j < searchArray[i].length(); j++){
+            if(searchArray[i][j] == "Buff"){
+                console.debug("Buff is here");
+            } else {
+                console.debug("Buff is NOT here");
+                break;
+            }
+        }
+
+    }
 });
 
+function csv2array(data, delimeter) {
+    // Retrieve the delimeter
+    if (delimeter == undefined) 
+      delimeter = ',';
+    if (delimeter && delimeter.length > 1)
+      delimeter = ',';
+  
+    // initialize variables
+    var newline = '\n';             //newline
+    var eof = '';                   //end of file
+    var index = 0;                  //index will increment
+    var char = data.charAt(index);  //each individual character read
+    var row = 0;
+    var col = 0;
+    var array = new Array();        //return value
 
+    while (char != eof) {
+      // skip whitespaces
+        while (char == ' ' || char == '\t' || char == '\r') {
+            char = data.charAt(++index); // read next char
+        }
+      
+      // get value
+      var value = "";
+      if (char == '\"') {
+        // value enclosed by double-quotes
+        char = data.charAt(++index);
+        
+          do {
+              if (char != '\"') {
+                  // read a regular character and go to the next character
+                  value += char
+                  char = data.charAt(++index);
+          }
 
+              if (char == '\"') {
+            // check for escaped double-quote
+            var cnext = data.charAt(i+1);
+            if (cnext == '\"') {
+              // this is an escaped double-quote. 
+              // Add a double-quote to the value, and move two characters ahead.
+              value += '\"';
+                i += 2;
+                char = data.charAt(index);
+            }
+          }
+          }
+          while (char != eof && char != '\"');
+
+          if (char == eof) {
+          throw "data ended without quote";
+        }
+
+          char = data.charAt(++index);
+      }
+      else {
+        // value without quotes
+        while (char != eof && char != delimeter && char != newline) {
+          value += char;
+          char = data.charAt(++index);
+        }
+      }
+  
+      // add the value to the array *******
+      if (array.length <= row) 
+        array.push(new Array());
+      array[row].push(value);
+      
+      // skip whitespaces
+      while (char == ' ' || char == '\t' || char == '\r') {
+        char = data.charAt(++i);
+      }
+     
+  
+      // go to the next row or column *******
+      if (char == delimeter) {
+        // to the next column
+        col++;
+      }
+      else if (char == newline) { //******** */
+        // to the next row
+        col = 0;
+        row++;
+      }
+      else if (char != eof) {
+        // unexpected character
+        throw "Delimiter expected after character " + i;
+      }
+      
+      // go to the next character
+      char = data.charAt(++index);
+    }  
+    
+    return array;
+  }
+//
 
 const server = http.createServer(app);
-const port = 3000;
+const port = 5000;
 server.listen(port);
 console.debug('Server listening on port ' + port);
