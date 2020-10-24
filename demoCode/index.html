@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-    <title>Sprint 2 - Calculatrons</title>
+    <title>Calculatrons</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
@@ -66,16 +66,15 @@ color: black;
 }
 </style>
 
-	    
 
     
 <head>
   
   <!-- <!michelle added this is the navigation bar> -->
   <div class="navigation">
-  <a class="Home" href="#home">Home</a>
-  <a href="#Under100Cal">Under 100 Cal</a>
-  <a href="#TopRecipes">Top Recipes</a>
+    <a class="Home" href="#home">Home</a>
+    <a href="#Under100Cal">Under 100 Cal</a>
+    <a href="#TopRecipes">Top Recipes</a>
   </div>
     
 </head>
@@ -85,11 +84,11 @@ color: black;
         
 	<style>
      body {background-color: cornsilk}
-     </style>
+    </style>
   
   <div>
   
-    <input type="text" placeholder="Search Here for Recipes...">
+    <input type="text" id = "searchBar" placeholder="Search Here for Recipes...">
     <button type="submit" onclick="Search()"><i class="fa fa-search"></i></button>
     
  </div>
@@ -137,14 +136,15 @@ color: black;
 
         const Search = () => {
             console.log("input accepted, displaying results shortly....")
-            fetch("/search").then(result => {
-                const data = result
-                console.log ("data is: ", data)
+            fetch("/search", {method: "POST"}).then(res => {
+                const data = res
+                console.log ("data is: ", res)
                 return data
             }).then(data =>  {
                 console.log("results produced")
-                document.getElementById("results").innerHTML = data;
+                document.getElementById("results").innerHTML = data["array"];
             }).catch(err => console.log(err));
+
         }
     </script>
 
