@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-    <title>Calculatrons</title>
+    <title>Calculatrons - Recipes</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
@@ -45,7 +45,7 @@
     
     
     .navigation {
-        background-color: #500;
+        background-color: black;
         overflow: hidden;
     }
 	
@@ -58,23 +58,77 @@
         text-decoration: none;
         font-size: 15px;
     }
+
+    .menu {
+         float:left;
+         overflow:hidden;
+     }
+
+     .menu .dropmenu {
+        font-size: 16px;
+        border: none;
+        outline: none;
+        color: white;
+        padding: 14px 16px;
+        background-color: inherit;
+        font-family: inherit;
+     }
+
+     .menu-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+     }
+
+     .menu-content a {
+        float: none;
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        text-align: left;
+     }
+
+     .menu:hover .menu-content {
+        display: block;
+        
+     }
+
+     .menu:hover .dropmenu {
+        background-color: red;
+     } 
+     
 	
 	
-.navigation a:hover{
+.navigation a:hover {
 background-color: white;
 color: black;
 }
+
 </style>
 
 
     
 <head>
   
-  <!-- <!michelle added this is the navigation bar> -->
+  <!-- <this is the dropdown menu> -->
   <div class="navigation">
-    <a class="Home" href="#home">Home</a>
-    <a href="#Under100Cal">Under 100 Cal</a>
-    <a href="#TopRecipes">Top Recipes</a>
+
+    <div class="menu">
+        <button class="dropmenu">Menu
+            <i class="fa fa-caret-down"></i>
+        </button>
+        <div class="menu-content">
+            <a class="Home" href="#home">Home</a>
+            <a href="#TopRecipes">Top Recipes</a>
+            <a href="#Under100Cal">Under 100 Cal</a>
+            <a href="#SearchHistory">Search History</a>
+        </div>
+
+    </div>
   </div>
     
 </head>
