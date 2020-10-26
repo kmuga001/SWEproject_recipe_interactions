@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-    <title>Calculatrons - Home</title>
+    <title>Calculatrons - Saved Recipes</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
@@ -32,7 +32,7 @@
     body {
         font-family: "Lato", sans-serif;
         text-align:center;
-        color: #008CBA
+        color: black;
     }
     .mySlides {
         display: none
@@ -141,67 +141,17 @@ color: black;
      body {background-color:rgb(159, 155, 219)}
     </style>
   
-  <div>
-  
-    <input type="text" id = "searchBar" placeholder="Search Here for Recipes...">
-    <button type="submit" onclick="Search()"><i class="fa fa-search"></i></button>
-    
- </div>
-    
-	
-    
     <div>
-    <h1> Featured Recipes</h1>
-    <img src = "https://www.inspiredtaste.net/wp-content/uploads/2018/10/Homemade-Vegetable-Soup-Recipe-2-1200.jpg" style="width:128px;height:128px;">
-    <img src = "https://www.tasteofhome.com/wp-content/uploads/2018/01/exps174202_LR153742D08_04_3b-696x696.jpg" style = "width:128px;height:128px;">
-    <img src = "https://food.fnr.sndimg.com/content/dam/images/food/fullset/2011/2/4/1/RX-FNM_030111-Lighten-Up-012_s4x3.jpg.rend.hgtvcom.616.462.suffix/1382539856907.jpeg" style = "width:128px;height:128px;">
+    <h1>My Saved Recipes</h1>
     
     </div>    
+    
+    <p> *These are the recipes that you have saved for later.</p>
 	    
-	    
     
+ </body>
+
     
-    <button class = "button button1" onclick="myFunction()">Send Request to Server</button>
-    <div id="to_replace"></div>
-    <div id="results"></div>
-    
-    
-    
-    </body>
-
-    <script>
-        const myFunction = () => {
-            console.log("button pressed, calling function")
-            //call function in server.js to recieve response
-            fetch("/response").then(res => {
-                console.log("res: ", res)
-                //convert response to json, make sure it works asychronously
-                //to prevent waiting long periods of time 
-                const data = res.json()
-                console.log("JSON is: ", data)
-                return data
-            }).then(data => {
-                console.log("data: ", data)
-                //assign data's response to locate "to_replace"
-                document.getElementById("to_replace").innerHTML = data["response"];
-            }).catch(err => console.log(err)); 
-
-
-        }
-
-        const Search = () => {
-            console.log("input accepted, displaying results shortly....")
-            fetch("/search", {method: "POST"}).then(res => {
-                const data = res
-                console.log ("data is: ", res)
-                return data
-            }).then(data =>  {
-                console.log("results produced")
-                document.getElementById("results").innerHTML = data["array"];
-            }).catch(err => console.log(err));
-
-        }
-    </script>
 
 </html>
 
