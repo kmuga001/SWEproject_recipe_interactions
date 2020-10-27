@@ -7,6 +7,13 @@ app.use(express.json());
 app.use(express.static("express"));
 // default URL for website
 
+app.get('/response', (req, res) => {
+  console.log("hello from server!")
+  return res.send({
+      "response": "hello from server!"
+  })
+});
+
 function csvToJSArray(data, delimeter) {
 
   if (delimeter == undefined) 
@@ -22,7 +29,7 @@ function csvToJSArray(data, delimeter) {
   var row = 0;
   var col = 0;
   var array = new Array();        //return value
-
+  
   while (char != eof) {//make sure file did not end
       while (char == '\t' || char == '\r' || char == ' ') {//check for tab and spaces
           char = data.charAt(++index); // read next char
@@ -47,11 +54,11 @@ function csvToJSArray(data, delimeter) {
         }
         }
         while (char != eof && char != '\"');
-
+  
         if (char == eof) {
         throw "data ended without quote";
       }
-
+  
         char = data.charAt(++index);
     }
     else {
@@ -61,7 +68,7 @@ function csvToJSArray(data, delimeter) {
         char = data.charAt(++index); //increment to next char
       }
     }
-
+  
     // add the value to the array *******
     if (array.length <= row) 
       array.push(new Array());
@@ -72,7 +79,7 @@ function csvToJSArray(data, delimeter) {
       char = data.charAt(++i);
     }
    
-
+  
     // go to the next row or column *******
     if (char == delimeter) {
       // to the next column
@@ -92,49 +99,38 @@ function csvToJSArray(data, delimeter) {
     char = data.charAt(++index);
   } 
   return array;
-}
+  }
 
-app.get('/response', (req, res) => {
-    console.log("hello from server!")
-    return res.send({
-        "response": "hello from server!"
-    })
+app.get('/search', (req, res) => {
+  console.log("hello from the search server!");
+  var filePath = './test.csv';
+  var searchArray = new Array();
+  searchArray = csvToJSArray(filePath, ',');
+  console.log("array check:", searchArray);
+
+  for(i = 0; i < searchArray.length; i++){
+      for(j = 0; j < searchArray[i].length; j++){
+          if(searchArray[i][j] == "Buff"){
+              console.debug("Buff is here");
+          } else {
+              console.debug("Buff is NOT here");
+              break;
+          }
+      }
+
+  }
+
+  return searchArray;
+/*   return res.send({
+      "array": "array!"
+  }) */
 });
 
 app.use('/', function(req,res){
-    res.sendFile(path.join(__dirname+'/index.html'));
-    //__dirname : It will resolve to your project folder.
-  });
-
-app.get('/search', (req, res) => {
-    console.log("hello from the search server!");
-
-    var filePath = './test.csv';
-    var searchArray = new Array();
-    searchArray = csvToJSArray(filePath, ',');
-    console.log("array check:", searchArray);
-
-    for(i = 0; i < searchArray.length(); i++){
-        for(j = 0; j < searchArray[i].length(); j++){
-            if(searchArray[i][j] == "Buff"){
-                console.debug("Buff is here");
-            } else {
-                console.debug("Buff is NOT here");
-                break;
-            }
-        }
-
-    }
-    //temp output untill fetch issue is solved. - abel 
-    return res.send({
-      "array": "array"
-  })
-
-
+  res.sendFile(path.join(__dirname+'/index.html'));
+  //__dirname : It will resolve to your project folder.
 });
 
-
-//
 
 const server = http.createServer(app);
 const port = 5000;
