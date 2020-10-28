@@ -48,7 +48,6 @@
     }
     
     
-    
     .navigation {
         background-color: black;
         overflow: hidden;
@@ -134,6 +133,19 @@ cursor: pointer;
 content: '\2605';
 }
 
+
+input[type="submit"]
+{
+    color: white;
+    background-color: green;
+}
+.btn button
+{
+    color: white;
+    background-color: red;
+}
+
+
 </style>
 
 
@@ -195,9 +207,7 @@ content: '\2605';
    </ul>
    <br>
    
-   
-
-   </div>
+  </div>
    
    <h4>Rate This Recipe!</h4>
    
@@ -208,13 +218,24 @@ content: '\2605';
    <span class = "star">&nbsp;</span>
    <span class = "star">&nbsp;</span>
    </div>
-	    
+	 
+     <div class="comments">
+  <h4>Leave a Comment About the Recipe!</h4>
+  <form>
+   <textarea placeholder='Add Your Comment Here!'rows="3" cols="40"></textarea>
+    <div class="btn">
+      <input type="submit" value='Comment'>
+      <button id='cancel' href='#'>Cancel</button>
+    </div>
+  </form>
+</div>
  
-   
-   </div>
+  
     
   </body>
   
+   
+   
    <script>
         document.addEventListener('DOMContentLoaded', function(){
             let stars = document.querySelectorAll('.star');
@@ -252,4 +273,3 @@ content: '\2605';
   
 
 </html>
-
