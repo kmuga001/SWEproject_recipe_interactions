@@ -219,15 +219,14 @@ input[type="submit"]
    <span class = "star">&nbsp;</span>
    </div>
 	 
-     <div class="comments">
+  <div class="comments">
   <h4>Leave a Comment About the Recipe!</h4>
-  <form>
-   <textarea placeholder='Add Your Comment Here!'rows="3" cols="40"></textarea>
+   <form><textarea id = "title" placeholder='Add Your Comment Here!'rows="3" cols="40"></textarea></form>
     <div class="btn">
-      <input type="submit" value='Comment'>
-      <button id='cancel' href='#'>Cancel</button>
+      <input type="submit" value='Comment' onclick="insert()">
+      <button id='cancel' onclick="cancel()">Cancel</button>
     </div>
-  </form>
+<div id = "display" class = "commshow"></div>
 </div>
  
   
@@ -269,6 +268,30 @@ input[type="submit"]
         }
         
     </script>
+	
+	
+<script>
+var titles = [];
+var titleInput = document.getElementById("title");
+var messageBox = document.getElementById("display");
+
+function insert () {
+titles.push(titleInput.value);
+clearAndShow();
+}
+
+function cancel(){
+titleInput.value = "";
+
+}
+function clearAndShow ()
+{
+titleInput.value = "";
+messageBox.innerHTML = "";
+messageBox.innerHTML += " " + titles.join("<br/> ") + "<br/>";
+}
+</script>
+    
   
   
 
