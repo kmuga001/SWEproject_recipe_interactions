@@ -143,10 +143,20 @@ color: black;
   
   <div>
   
-    <input type="text" id="searchBar" placeholder="Search Here for Recipes...">
-    <button type="submit" onclick="Search()"><i class="fa fa-search"></i></button>
+    <!--<input type="text" id="searchBar" placeholder="Search Here for Recipes...">
+    <button type="submit" onclick="Search()"><i class="fa fa-search"></i></button> -->
+
     
- </div>
+    <!-- <a href=”/your_flask_funtion”><input type=”button” value=”call_flask_funtion”></a> 
+    <button action="/upload/">Klik</button> need to figure out how to connect with python function--> 
+
+    <!--<<form class = "submit" action = "action_page.php">
+        <input type = "text" placeholder="search..." name = "searchbar">
+        <button type = "submit"><i class = "fa fa-search"></i></button>
+    </form> -->
+    
+    
+</div>
     
 	
     
@@ -166,11 +176,19 @@ color: black;
     <div id="results"></div>
     <div id="search check"></div>
     
+
+    <form action="{{ url_for('home') }}">
+        <input type = "text" placeholder="search for a recipe..." name = "searchbar">
+        <button type = "submit"><i class = "fa fa-search"></i></button>
+        
+    
+    </form>
+
     
     
     </body>
 
-    <script>
+   <!--<script>
         const serverRequest = () => {
             console.log("button pressed, calling function")
             //call function in server.js to recieve response
@@ -206,6 +224,15 @@ color: black;
             }).catch(err => console.log(err)); 
         }
     
-    </script>
+    </script> 
+
+@app.route('/', methods=['GET', 'POST'])
+def index():
+    search = SearchForm(request.form)
+    if request.method == 'POST':
+        return search_results(search)
+    return render_template('index.html', form=search)
+
+-->
 
 </html>
