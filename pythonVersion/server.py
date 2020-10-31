@@ -7,10 +7,28 @@ app=Flask(__name__)
 @app.route('/', methods = ['POST', 'GET'])
 def home():
     app.route('/', methods = ['POST', 'GET'])
-    items = parser()
-    category = "Name"
-    performSearch(category, items)
+    #items = parser()
+    #category = "Name"
+    #results = performSearch(category, items)
+    #print(results)
     return render_template("index.html")
+
+
+@app.route('/search', methods=['POST'])
+def hello():
+    search_value = request.form['search_value']
+    str_result = ""
+    #test_array = ["1", "2", "3"]
+    items = parser()
+    category = search_value
+    results = performSearch(category, items)
+    for val in results:
+        str_result += val
+        str_result += " "
+
+
+    return 'The category you searched for is: %s <br /> These are the results: %s <br /> <a href="/">Back Home</a>' % (search_value,str_result)
+
 
 def performSearch(category, items):
     searchedItems = []
@@ -22,8 +40,8 @@ def performSearch(category, items):
     searchedItems = [sub[k] for sub in items]
     searchedItems.pop(0)
 
-    print(category, ":", searchedItems)
-    return ""
+    #print(category, ":", searchedItems)
+    return searchedItems
 
  
 def parser():
@@ -35,6 +53,9 @@ def parser():
             items.append(row)
 
         return items
+
+
+
 
     
 
