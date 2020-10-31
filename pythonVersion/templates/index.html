@@ -135,42 +135,36 @@ color: black;
 </head>
     
     
- <body>
+<body>
         
 	<style>
      body {background-color:rgb(159, 155, 219)}
     </style>
   
-  <div>
+    <!--     
+    <div>
   
-    <!--<input type="text" id="searchBar" placeholder="Search Here for Recipes...">
-    <button type="submit" onclick="Search()"><i class="fa fa-search"></i></button> -->
+        <input type="text" id="searchBar" placeholder="Search Here for Recipes...">
+        <button type="submit" onclick="Search()"><i class="fa fa-search"></i></button>
 
-    
-    <!-- <a href=”/your_flask_funtion”><input type=”button” value=”call_flask_funtion”></a> 
-    <button action="/upload/">Klik</button> need to figure out how to connect with python function--> 
+        
+        <a href=”/your_flask_funtion”><input type=”button” value=”call_flask_funtion”></a> 
+        <button action="/upload/">Klik</button>
 
-    <!--<<form class = "submit" action = "action_page.php">
-        <input type = "text" placeholder="search..." name = "searchbar">
-        <button type = "submit"><i class = "fa fa-search"></i></button>
-    </form> -->
-    
-    
-</div>
-    
-	
+        <form class = "submit" action = "action_page.php">
+            <input type = "text" placeholder="search..." name = "searchbar">
+            <button type = "submit"><i class = "fa fa-search"></i></button>
+        </form>
+        
+    </div> -->
     
     <div>
-    <h1> Featured Recipes</h1>
-    <img src = "https://www.inspiredtaste.net/wp-content/uploads/2018/10/Homemade-Vegetable-Soup-Recipe-2-1200.jpg" style="width:128px;height:128px;">
-    <img src = "https://www.tasteofhome.com/wp-content/uploads/2018/01/exps174202_LR153742D08_04_3b-696x696.jpg" style = "width:128px;height:128px;">
-    <img src = "https://food.fnr.sndimg.com/content/dam/images/food/fullset/2011/2/4/1/RX-FNM_030111-Lighten-Up-012_s4x3.jpg.rend.hgtvcom.616.462.suffix/1382539856907.jpeg" style = "width:128px;height:128px;">
-    
+        <h1> Featured Recipes</h1>
+        <img src = "https://www.inspiredtaste.net/wp-content/uploads/2018/10/Homemade-Vegetable-Soup-Recipe-2-1200.jpg" style="width:128px;height:128px;">
+        <img src = "https://www.tasteofhome.com/wp-content/uploads/2018/01/exps174202_LR153742D08_04_3b-696x696.jpg" style = "width:128px;height:128px;">
+        <img src = "https://food.fnr.sndimg.com/content/dam/images/food/fullset/2011/2/4/1/RX-FNM_030111-Lighten-Up-012_s4x3.jpg.rend.hgtvcom.616.462.suffix/1382539856907.jpeg" style = "width:128px;height:128px;">
     </div>    
 	    
-	    
-    
-    
     <button class = "button button1" onClick="serverRequest()">Send Request to Server</button>
     <div id="to_replace"></div>
     <div id="results"></div>
@@ -180,13 +174,9 @@ color: black;
     <form action="{{ url_for('home') }}">
         <input type = "text" placeholder="search for a recipe..." name = "searchbar">
         <button type = "submit"><i class = "fa fa-search"></i></button>
-        
-    
     </form>
 
-    
-    
-    </body>
+</body>
 
    <!--<script>
         const serverRequest = () => {
