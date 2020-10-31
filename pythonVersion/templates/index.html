@@ -171,10 +171,28 @@ color: black;
     <div id="search check"></div>
     
 
-    <form action="{{ url_for('home') }}">
-        <input type = "text" placeholder="search for a recipe..." name = "searchbar">
+    <!--<form action="{{ url_for('home') }}">
+        <input type = "text" id = "searching" placeholder="search for a recipe..." name = "searchbar">
         <button type = "submit"><i class = "fa fa-search"></i></button>
+    </form>-->
+    <form action="">
+        <input type = "text" id = "searching" placeholder="search for a recipe..." name = "searchbar">
+        <button type = "button" onclick=checkInput()><i class = "fa fa-search"></i></button>
+
     </form>
+
+    <div id = "display" class="commshow"></div>
+
+    <script>
+        function checkInput(){
+            var searchInput = document.getElementById("searching").value;
+            if(searchInput == ""){
+                document.getElementById("display").innerHTML = "Please type a value to make the search.";
+            } else {
+                document.getElementById("display").innerHTML = searchInput + " was searched!";
+            }
+        }
+    </script>
 
 </body>
 
