@@ -39,11 +39,14 @@ def saveRecipe():
     recipeInfo = getRecipeInfo(r_id, recipe_col, items)
     print(recipeInfo)
     #write the recipe into a csv file
-    with open('saved.csv','w') as output:
-        for recipeVal in recipeInfo:
-            output.write(recipeVal + ',')
+    with open('saved.csv','a') as output:
+        for recipeVal in range(len(recipeInfo)):
+            if recipeVal == (len(recipeInfo) - 1):
+                output.write(recipeInfo[recipeVal])
+            else:
+                output.write(recipeInfo[recipeVal] + ',')
 
-
+        output.write('\n')
 
     #display result to website
     str_result_str = ""
@@ -54,6 +57,15 @@ def saveRecipe():
 
     return 'You searched for a recipe with id: %s <br /> Here is the information of the recipe that you saved: %s <br /> <a href="/">Back Home</a>' % (r_id, str_result_str)
 
+
+
+@app.route('/clear', methods=['POST'])
+def clearSavedRecipes():
+    file_clear = open('saved.csv','w')
+    file_clear.truncate()
+    file_clear.close()
+
+    return 'You cleared your saved recipes. <br /> <a href="/">Back Home</a>'
 
 
 def getRecipeInfo(r_id, recipe_col, items):
