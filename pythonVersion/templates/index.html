@@ -159,7 +159,8 @@ color: black;
     </div> -->
     
     <div>
-        <h1> Featured Recipes</h1>
+        <h1>HOME PAGE</h1>
+        <h2>Featured Recipes</h2>
         <img src = "https://www.inspiredtaste.net/wp-content/uploads/2018/10/Homemade-Vegetable-Soup-Recipe-2-1200.jpg" style="width:128px;height:128px;">
         <img src = "https://www.tasteofhome.com/wp-content/uploads/2018/01/exps174202_LR153742D08_04_3b-696x696.jpg" style = "width:128px;height:128px;">
         <img src = "https://food.fnr.sndimg.com/content/dam/images/food/fullset/2011/2/4/1/RX-FNM_030111-Lighten-Up-012_s4x3.jpg.rend.hgtvcom.616.462.suffix/1382539856907.jpeg" style = "width:128px;height:128px;">
@@ -171,36 +172,23 @@ color: black;
     <div id="search check"></div>
     
 
-    <!--<form action="{{ url_for('home') }}">
-        <input type = "text" id = "searching" placeholder="search for a recipe..." name = "searchbar">
-        <button type = "submit"><i class = "fa fa-search"></i></button>
-    </form>
-    <form action="">
-        <input type = "text" id = "searching" placeholder="search for a recipe..." name = "searchbar">
-        <button type = "button" onclick=checkInput()><i class = "fa fa-search"></i></button>
-
-    </form>-->
-
-    <div id = "display" class="commshow"></div>
-
-    <!-- example!!!-->
+    <!--This is for the search button-->
     <form action="/search" method="post">
-        Search here: <input type="text" name="search_value"> <br />
+        Search here: <input type="text" placeholder="search by category..." name="search_value"> <br />
         <input type="submit" name="form" value="submit" />
     </form>
 
+    <br />
+    <br />
 
+    
+    <!--This is for the saved recipes-->
+    <form action="/savings" method="post">
+        <p>To save a specific recipe, please input that recipe's id: <br /></p>
+        <input type="text" placeholder="input the recipe id..." name="savedRecipe_id"/>
+        <input type="submit" name="form" value="submit" />
+    </form>
 
-    <script>
-        function checkInput(){
-            var searchInput = document.getElementById("searching").value;
-            if(searchInput == ""){
-                document.getElementById("display").innerHTML = "Please type a value to make the search.";
-            } else {
-                document.getElementById("display").innerHTML = searchInput + " was searched!";
-            }
-        }
-    </script>
 
 </body>
 

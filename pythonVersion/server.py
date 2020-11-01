@@ -15,19 +15,58 @@ def home():
 
 
 @app.route('/search', methods=['POST'])
-def hello():
+def searchingInput():
     search_value = request.form['search_value']
     str_result = ""
     #test_array = ["1", "2", "3"]
-    items = parser()
+    items = parser('datasets/interactions_test.csv')
     category = search_value
     results = performSearch(category, items)
-    for val in results:
-        str_result += val
+    for val in range(8):
+        str_result += results[val]
         str_result += " "
 
 
     return 'The category you searched for is: %s <br /> These are the results: %s <br /> <a href="/">Back Home</a>' % (search_value,str_result)
+
+
+@app.route('/savings', methods=['POST'])
+def saveRecipe():
+    r_id_int = request.form['savedRecipe_id']
+    r_id = str(r_id_int)
+    items = parser('datasets/interactions_test.csv')
+    recipe_col = performSearch('recipe_id', items)
+    recipeInfo = getRecipeInfo(r_id, recipe_col, items)
+    print(recipeInfo)
+    #write the recipe into a csv file
+    with open('saved.csv','w') as output:
+        for recipeVal in recipeInfo:
+            output.write(recipeVal + ',')
+
+
+
+    #display result to website
+    str_result_str = ""
+    for value in recipeInfo:
+        str_result_str += value
+        str_result_str += " "
+
+
+    return 'You searched for a recipe with id: %s <br /> Here is the information of the recipe that you saved: %s <br /> <a href="/">Back Home</a>' % (r_id, str_result_str)
+
+
+
+def getRecipeInfo(r_id, recipe_col, items):
+    rowNum = 0
+    recipeInfo = []
+
+    for val in range(len(recipe_col)):
+        if recipe_col[val] == r_id:
+            rowNum = val
+            break
+    
+    recipeInfo = items[rowNum + 1]
+    return recipeInfo
 
 
 def performSearch(category, items):
@@ -44,12 +83,12 @@ def performSearch(category, items):
     return searchedItems
 
  
-def parser():
+def parser(filename):
     items = []
-    with open('test.csv', newline='') as myFile:
+    with open(filename, newline='') as myFile:
         dataSet = csv.reader(myFile, delimiter=',', quoting=csv.QUOTE_NONE)
         for row in dataSet:#take in row at a time
-            print(row)#test print
+            #print(row)
             items.append(row)
 
         return items
