@@ -22,20 +22,19 @@ def searchingInput():
 
     #search through category for input. 
     items = parser('datasets/interactions_test.csv')
-    results = findResult(category, items, search_value)
+    results = findRow(category, items, search_value)
 
 
 
-    return 'The category you searched for is: %s <br /> These are the results:  <br /> %s <a href="/">Back Home</a>' % (search_value,str(results))
+    return 'The file you searched for is: %s <br /> These are the results:  <br /> %s <a href="/">Back Home</a>' % (search_value,str(results))
 
 @app.route('/savings', methods=['POST'])
 def saveRecipe():
     r_id_int = request.form['savedRecipe_id']
     r_id = str(r_id_int)
     items = parser('datasets/interactions_test.csv')
-    recipe_col = findResult('recipe_id', items,"")
+    recipe_col = findColumn('recipe_id', items)
     recipeInfo = getRecipeInfo(r_id, recipe_col, items)
-    print(recipeInfo)
     #write the recipe into a csv file
     with open('saved.csv','a') as output:
         for recipeVal in range(len(recipeInfo)):
@@ -78,8 +77,19 @@ def getRecipeInfo(r_id, recipe_col, items):
     recipeInfo = items[rowNum + 1]
     return recipeInfo
 
+def findColumn(category, items):
+    c = []
+    k = -1
+    for a in range(len(items[0])-1):
+        if items[0][a] == category:
+            k = a
+            break
+    c = [sub[k] for sub in items]
+    c.pop(0)
 
-def findResult(category, items, input):
+    return c
+
+def findRow(category, items, input):
     searchedItems = []
     col = -1
     row = -1
