@@ -1,5 +1,4 @@
 from flask import Flask, render_template, url_for, request
-#from forms import SearchForm
 import csv
 
 app=Flask(__name__)
@@ -7,35 +6,34 @@ app=Flask(__name__)
 @app.route('/', methods = ['POST', 'GET'])
 def home():
     app.route('/', methods = ['POST', 'GET'])
-    #items = parser()
-    #category = "Name"
-    #results = performSearch(category, items)
-    #print(results)
     return render_template("index.html")
 
 
+""" steps for search function
+ - 
+ - search through that category with input 
+ - if the input is found, take everything else in that row. 
+ """
 @app.route('/search', methods=['POST'])
 def searchingInput():
+    #step 1: take in input and selected category 
     search_value = request.form['search_value']
-    str_result = ""
-    #test_array = ["1", "2", "3"]
+    category = "user_id"
+
+    #search through category for input. 
     items = parser('datasets/interactions_test.csv')
-    category = search_value
-    results = performSearch(category, items)
-    for val in range(8):
-        str_result += results[val]
-        str_result += " "
+    results = findResult(category, items, search_value)
 
 
-    return 'The category you searched for is: %s <br /> These are the results: %s <br /> <a href="/">Back Home</a>' % (search_value,str_result)
 
+    return 'The category you searched for is: %s <br /> These are the results:  <br /> %s <a href="/">Back Home</a>' % (search_value,str(results))
 
 @app.route('/savings', methods=['POST'])
 def saveRecipe():
     r_id_int = request.form['savedRecipe_id']
     r_id = str(r_id_int)
     items = parser('datasets/interactions_test.csv')
-    recipe_col = performSearch('recipe_id', items)
+    recipe_col = findResult('recipe_id', items,"")
     recipeInfo = getRecipeInfo(r_id, recipe_col, items)
     print(recipeInfo)
     #write the recipe into a csv file
@@ -52,7 +50,7 @@ def saveRecipe():
     str_result_str = ""
     for value in recipeInfo:
         str_result_str += value
-        str_result_str += " "
+        str_result_str += ' '
 
 
     return 'You searched for a recipe with id: %s <br /> Here is the information of the recipe that you saved: %s <br /> <a href="/">Back Home</a>' % (r_id, str_result_str)
@@ -81,17 +79,22 @@ def getRecipeInfo(r_id, recipe_col, items):
     return recipeInfo
 
 
-def performSearch(category, items):
+def findResult(category, items, input):
     searchedItems = []
-    k = -1
-    for a in range(len(items[0])-1):
-        if items[0][a] == category:
-            k = a
-            break
-    searchedItems = [sub[k] for sub in items]
-    searchedItems.pop(0)
+    col = -1
+    row = -1
 
-    #print(category, ":", searchedItems)
+    for c in range(len(items[0])-1):
+        if items[0][c] == category:
+            col = c
+            break
+    for r in range(len(items[col])):
+        if items[r][col] == input:
+            row = r
+            break
+
+    searchedItems = {items[0][i]:items[row][i] for i in range(len(items[0]))}
+
     return searchedItems
 
  
@@ -100,7 +103,6 @@ def parser(filename):
     with open(filename, newline='') as myFile:
         dataSet = csv.reader(myFile, delimiter=',', quoting=csv.QUOTE_NONE)
         for row in dataSet:#take in row at a time
-            #print(row)
             items.append(row)
 
         return items
@@ -140,3 +142,5 @@ def parser(filename):
 
 if __name__=="__main__":
     app.run(debug=True)
+
+
