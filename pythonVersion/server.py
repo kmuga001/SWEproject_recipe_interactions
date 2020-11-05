@@ -16,6 +16,7 @@ def home():
     return render_template("index.html")
 
 
+
 @app.route('/results1/')
 def sendResultPage():
     return render_template('results1.html')
@@ -153,24 +154,49 @@ def getIngredients():
 
 
 
+@app.route('/results', methods = ['POST', 'GET'])
+def recipeResults():
+    app.route('/results', methods = ['POST', 'GET'])
+    return render_template("results.html")
+
+
 """ steps for search function
  - 
  - search through that category with input 
  - if the input is found, take everything else in that row. 
  """
+
+
+
+#@app.route('/search', methods=['POST'])
+#def searchingInput():
+    #step 1: take in input and selected category 
+  #  search_value = request.form['search_value']
+   # category = "user_id"
+
+    #search through category for input. 
+   # items = parser('datasets/interactions_test.csv')
+   # results = findRow(category, items, search_value)
+
+
+
+
+
+
+#For testing purposes
 @app.route('/search', methods=['POST'])
 def searchingInput():
     #step 1: take in input and selected category 
     search_value = request.form['search_value']
-    category = "user_id"
+    category = "sex"
 
     #search through category for input. 
-    items = parser('datasets/interactions_test.csv')
+    items = parser('test.csv')
     results = findRow(category, items, search_value)
 
+    return render_template('results.html', results)
+    #return 'You searched for %s in the category of %s <br /> These are your results:  <br /> %s <a href="/">Back Home</a> <a href="/recipe">more info</a>' % (search_value,category,str(results))
 
-
-    return 'The file you searched for is: %s <br /> These are the results:  <br /> %s <a href="/">Back Home</a>' % (search_value,str(results))
 
 @app.route('/savings', methods=['POST'])
 def saveRecipe():
@@ -235,19 +261,14 @@ def findColumn(category, items):
 
 def findRow(category, items, input):
     searchedItems = []
-    col = -1
-    row = -1
-
     for c in range(len(items[0])-1):
-        if items[0][c] == category:
-            col = c
+        if items[0][c] == category:   
+            column = [sub[c] for sub in items]
             break
-    for r in range(len(items[col])):
-        if items[r][col] == input:
-            row = r
-            break
-
-    searchedItems = {items[0][i]:items[row][i] for i in range(len(items[0]))}
+    
+    for r in range(len(column)):
+        if column[r] == input:
+            searchedItems.append({items[0][i]:items[r][i] for i in range(1,len(items[0]))})
 
     return searchedItems
 
