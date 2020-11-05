@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <h1>RESULTS2 PAGE</h1>
+        <p>This is the second results page.</p>
+
+        <!--This is for visualizing plots-->
+        <form action="/secondplot" method="post">
+            <p>Grabbing linear plot: <br /></p>
+            <input type="submit" name="form" value="display plot" />
+        </form>
+
+        <p>BAR GRAPH:</p>
+        
+        <img src="{{url_for('static', filename='bar.png')}}" />
+
+
+        <br />
+        <p> <strong>Understanding the bar graph:</strong> <br />
+        This plot displays the distribution of ratings for each recipe vs. average number of ingredients
+        used for each recipe. <br /> The distribution of the data seems to very close, but we can see that 
+        the recipes with the highest ratings have the most ingredients (about 20).
+        
+        
+        </p>
+
+        <br />
+
+        <!--<form action="/linearplot" method="post">
+            <p>Grabbing bar graph: <br /></p>
+            <input type="submit" name="form" value="display bar" />
+        </form>
+        <p>BAR GRAPH:</p>
+        
+        <img src="{{url_for('static', filename='linearplots3.png')}}" />-->
+
+    </body>
+</html>

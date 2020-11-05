@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <h1>RESULTS1 PAGE</h1>
+        <p>This is the first analytics page.</p>
+
+        <!--This is for visualizing plots-->
+        <form action="/linearplot" method="post">
+            <p>Grabbing linear plot: <br /></p>
+            <input type="submit" name="form" value="display plot" />
+        </form>
+
+        <p>LINEAR PLOT:</p>
+        
+        <img src="{{url_for('static', filename='linearplots1.png')}}" />
+
+        <br />
+        <p> <strong>Understanding the plot:</strong> <br />
+        This plot displays the distribution of suggested cooking time (in minutes) vs. the ratings for each recipe.
+        From this plot, we can see that the recipes with the highest ratings of 4.0 and 5.0 are usually the <br />
+        recipes that take less time to make.
+        
+        </p>
+
+        <br />
+
+        <!--<form action="/linearplot" method="post">
+            <p>Grabbing bar graph: <br /></p>
+            <input type="submit" name="form" value="display bar" />
+        </form>
+        <p>BAR GRAPH:</p>
+        
+        <img src="{{url_for('static', filename='linearplots3.png')}}" />-->
+
+    </body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <h1>RESULTS3 PAGE</h1>
+        <p>This is the third results page.</p>
+
+        <!--This is for visualizing plots-->
+        <form action="/thirdplot" method="post">
+            <p>Grabbing linear plot: <br /></p>
+            <input type="submit" name="form" value="display plot" />
+        </form>
+
+        <p>Box Plot:</p>
+        
+        <img src="{{url_for('static', filename='boxpl.png')}}" />
+
+        <br />
+        <p> <strong>Understanding the box plot:</strong> <br />
+        This plot displays the distribution of number of ingredients that are used for each recipe. <br /> 
+        Minimum number of ingredients: ~3 ingredients <br />
+        Median number of ingredients: 7.5 ingredients <br />
+        Maximum number of ingredients: ~22 ingredients
+
+        
+        
+        </p>
+
+
+        <br />
+
+        <!--<form action="/linearplot" method="post">
+            <p>Grabbing bar graph: <br /></p>
+            <input type="submit" name="form" value="display bar" />
+        </form>
+        <p>BAR GRAPH:</p>
+        
+        <img src="{{url_for('static', filename='linearplots3.png')}}" />-->
+
+    </body>
+</html>

@@ -1,12 +1,156 @@
 from flask import Flask, render_template, url_for, request
 import csv
+#%matplotlib inline
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
+#import numpy as np 
+
 
 app=Flask(__name__)
 
 @app.route('/', methods = ['POST', 'GET'])
 def home():
     app.route('/', methods = ['POST', 'GET'])
+    
     return render_template("index.html")
+
+
+@app.route('/results1/')
+def sendResultPage():
+    return render_template('results1.html')
+
+@app.route('/results2/')
+def sendResult2Page():
+    return render_template('results2.html')
+
+@app.route('/results3/')
+def sendResult3Page():
+    return render_template('results3.html')
+
+#create a png file for each plot using function: 
+
+@app.route('/linearplot', methods = ['POST'])
+def linearPlot():           #plot time vs rating
+    time = getTime()        
+    rating = getRating()
+
+    #plt.plot(time,rating, 'g---')
+    #plt.scatter(time, rating, s=area, c=colors, alpha=0.5)
+    plt.plot(time,rating,'o',color='black')
+    plt.xlabel('Time (minutes)')
+    plt.ylabel('Rating (1-5)')
+
+    plt.savefig('static/linearplots1.png')
+    
+    
+    #return 'here is a linear plot that measures time (minutes) vs rating (out of 5) <br /> <a href="/">Back Home</a>'
+    return render_template('results1.html')
+
+@app.route('/secondplot', methods = ['POST'])
+def barPlot():           #plot time vs rating
+    ratings = getRating()        
+    ingredients = getIngredients()
+
+    #plt.plot(time,rating, 'g---')
+    #plt.scatter(time, rating, s=area, c=colors, alpha=0.5)
+    #plt.plot(ratings,ingredients,'o',color='black')
+    plt.bar(ratings, ingredients, color='blue')
+    plt.xlabel('Ratings (out of 5)')
+    plt.ylabel('# of ingredients')
+
+    plt.savefig('static/bar.png')
+    
+    
+    #return 'here is a linear plot that measures time (minutes) vs rating (out of 5) <br /> <a href="/">Back Home</a>'
+    return render_template('results2.html')
+
+
+@app.route('/thirdplot', methods = ['POST'])
+def boxPlot():           #plot time vs rating
+    ingredients = getIngredients()        
+
+    #plt.plot(time,rating, 'g---')
+    #plt.scatter(time, rating, s=area, c=colors, alpha=0.5)
+    #plt.plot(ratings,ingredients,'o',color='black')
+    plt.boxplot(ingredients)
+    plt.title("range of ingredients")
+    
+
+    plt.savefig('static/boxpl.png')
+    
+    
+    #return 'here is a linear plot that measures time (minutes) vs rating (out of 5) <br /> <a href="/">Back Home</a>'
+    return render_template('results3.html')
+
+
+
+def getAverageIngred(numRate, ratingArr, ingrArr):
+    sumIngr = 0
+    rounds = 0
+    for i, j in zip(ratingArr, ingrArr):
+        if i == numRate:
+            sumIngr += j
+        rounds += 1
+
+    averageIngr = int(sumIngr/rounds)
+    return averageIngr
+
+
+def getTime():    #get time from RAW_recipes
+    with open('datasets/RAW_recipes.csv') as rawRecipes:
+        recipeList = csv.DictReader(rawRecipes)
+        timeList = []
+        #for recipe in recipeList:
+        #    time = int(recipe['minutes'])
+        #    timeList.append(time)
+        count = 0
+        for recipe in recipeList:
+            if count <= 100:
+                time = int(recipe['minutes'])
+                timeList.append(time)
+            else:
+                break
+            count += 1
+        
+        return timeList
+
+def getRating():    #get rating from interactions_test
+    with open('datasets/interactions_test.csv') as iTests:
+        recipeList = csv.DictReader(iTests)
+        ratingValList = []
+        
+        #for recipe in recipeList:
+        #    ratingVal = float(recipe['rating'])
+        #    ratingValList.append(ratingVal)
+        count = 0
+        for recipe in recipeList:
+            if count <= 100:
+                ratingVal = float(recipe['rating'])
+                ratingValList.append(ratingVal)
+            else:
+                break
+            count += 1
+
+        return ratingValList
+
+def getIngredients():
+    with open('datasets/RAW_recipes.csv') as ingredients:
+        ingredientsList = csv.DictReader(ingredients)
+        numOfIngredients = []
+        count = 0
+        for ingredient in ingredientsList:
+            if count <= 100:
+                ingredientVal = int(ingredient['n_ingredients'])
+                numOfIngredients.append(ingredientVal)
+            else:
+                break
+            count += 1
+        return numOfIngredients
+
+
+
+
 
 
 """ steps for search function
