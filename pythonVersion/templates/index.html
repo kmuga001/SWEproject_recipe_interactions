@@ -134,6 +134,15 @@ color: black;
     
 </head>
     
+<script>
+    /*     fetch('/search').then(function(response) {
+                console.log("response is", response)
+               return response.json()
+           }).then(function(res){ 
+               document.getElementById("searchResponse").innerHTML = res;
+           }).catch(err => console.log(err));  */
+        var results = {results}
+       </script> 
     
 <body>
         
@@ -171,8 +180,9 @@ color: black;
 
     <!--This is for the search button-->
     <form action="/search" method="post">
-        Search here: <input type="text" placeholder="search by category..." name="search_value"> <br />
-        <input type="submit" name="form" value="submit" />
+        Search here: <input type="text" placeholder="..." name="search_value"> <br />
+        <input type="submit" name="form" value="submit" />  <br/>
+        Results: {{results}} <br/>
     </form>
 
 
@@ -186,6 +196,7 @@ color: black;
         <input type="text" placeholder="input the recipe id..." name="savedRecipe_id"/>
         <input type="submit" name="form" value="submit" />
     </form>
+ 
 
     <br />
 
@@ -198,51 +209,6 @@ color: black;
 
 </body>
 
-   <!--<script>
-        const serverRequest = () => {
-            console.log("button pressed, calling function")
-            //call function in server.js to recieve response
-            fetch("/response").then(res => {
-                console.log("res: ", res)
-                //convert response to json, make sure it works asychronously
-                //to prevent waiting long periods of time 
-                const data = res.json()
-                console.log("JSON is: ", data)
-                return data
-            }).then(data => {
-                console.log("data: ", data)
-                //assign data's response to locate "to_replace"
-                document.getElementById("to_replace").innerHTML = data["response"];
-            }).catch(err => console.log(err)); 
 
-
-        }
-
-        function Search(){
-            var x = document.getElementById("searchBar").value;
-            console.log("x is", x)
-            document.getElementById("results").innerHTML=x;
-            console.log("value passed, entering parsing algorithm..")
-            fetch("/search").then(res => {
-                console.log("res: ", res)
-                const data = res.json()
-                console.log("JSON is: ", data)
-                return data
-            }).then(data => {
-                console.log("data: ", data)
-                document.getElementById("search check").innerHTML = data;
-            }).catch(err => console.log(err)); 
-        }
-    
-    </script> 
-
-@app.route('/', methods=['GET', 'POST'])
-def index():
-    search = SearchForm(request.form)
-    if request.method == 'POST':
-        return search_results(search)
-    return render_template('index.html', form=search)
-
--->
 
 </html>
