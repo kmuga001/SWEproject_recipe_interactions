@@ -1,5 +1,6 @@
-from flask import Flask, render_template, url_for, request
+from flask import Flask, render_template, url_for, request, jsonify
 import csv
+import json
 #%matplotlib inline
 import matplotlib
 matplotlib.use('Agg')
@@ -195,25 +196,13 @@ def recipeResults():
  """
 
 
-
-#@app.route('/search', methods=['POST'])
-#def searchingInput():
-    #step 1: take in input and selected category 
-  #  search_value = request.form['search_value']
-   # category = "user_id"
-
-    #search through category for input. 
-   # items = parser('datasets/interactions_test.csv')
-   # results = findRow(category, items, search_value)
-
-
-
-
-
-
 #For testing purposes
+<<<<<<< HEAD
 """
 @app.route('/search', methods=['POST'])
+=======
+@app.route('/search', methods=['GET','POST'])
+>>>>>>> 29fafc8a79d127d8d5a4b03a7284a743d47dcbbd
 def searchingInput():
     #step 1: take in input and selected category 
     search_value = request.form['search_value']
@@ -221,11 +210,17 @@ def searchingInput():
 
     #search through category for input. 
     items = parser('test.csv')
+
     results = findRow(category, items, search_value)
 
+<<<<<<< HEAD
     return render_template('results.html', results)
     #return 'You searched for %s in the category of %s <br /> These are your results:  <br /> %s <a href="/">Back Home</a> <a href="/recipe">more info</a>' % (search_value,category,str(results))
 """
+=======
+    return render_template('index.html', results=json.dumps(results))
+
+>>>>>>> 29fafc8a79d127d8d5a4b03a7284a743d47dcbbd
 
 @app.route('/savings', methods=['POST'])
 def saveRecipe():
@@ -278,26 +273,20 @@ def getRecipeInfo(r_id, recipe_col, items):
 
 def findColumn(category, items):
     c = []
-    k = -1
-    for a in range(len(items[0])-1):
-        if items[0][a] == category:
-            k = a
-            break
-    c = [sub[k] for sub in items]
+    index = items[0].index(category)
+    c = [sub[index] for sub in items]
     c.pop(0)
 
     return c
 
 def findRow(category, items, input):
     searchedItems = []
-    for c in range(len(items[0])-1):
-        if items[0][c] == category:   
-            column = [sub[c] for sub in items]
-            break
+    c = items[0].index(category)
+    column = [sub[c] for sub in items]
     
     for r in range(len(column)):
         if column[r] == input:
-            searchedItems.append({items[0][i]:items[r][i] for i in range(1,len(items[0]))})
+            searchedItems.append({items[0][i]:items[r][i] for i in range(len(items[0]))})
 
     return searchedItems
 
