@@ -197,12 +197,8 @@ def recipeResults():
 
 
 #For testing purposes
-<<<<<<< HEAD
-"""
-@app.route('/search', methods=['POST'])
-=======
+
 @app.route('/search', methods=['GET','POST'])
->>>>>>> 29fafc8a79d127d8d5a4b03a7284a743d47dcbbd
 def searchingInput():
     #step 1: take in input and selected category 
     search_value = request.form['search_value']
@@ -213,14 +209,9 @@ def searchingInput():
 
     results = findRow(category, items, search_value)
 
-<<<<<<< HEAD
-    return render_template('results.html', results)
-    #return 'You searched for %s in the category of %s <br /> These are your results:  <br /> %s <a href="/">Back Home</a> <a href="/recipe">more info</a>' % (search_value,category,str(results))
-"""
-=======
+
     return render_template('index.html', results=json.dumps(results))
 
->>>>>>> 29fafc8a79d127d8d5a4b03a7284a743d47dcbbd
 
 @app.route('/savings', methods=['POST'])
 def saveRecipe():
