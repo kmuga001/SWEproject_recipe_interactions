@@ -6,19 +6,19 @@
 
         <!--This is for visualizing plots-->
         <form action="/linearplot" method="post">
-            <p>Grabbing linear plot: <br /></p>
+            <p>Grabbing histogram plot: <br /></p>
             <input type="submit" name="form" value="display plot" />
         </form>
 
-        <p>LINEAR PLOT:</p>
+        <p>HISTOGRAM:</p>
         
-        <img src="{{url_for('static', filename='linearplots1.png')}}" />
+        <!--<img src="{{url_for('static', filename='histstepall.png')}}" />-->
+        <img src="static/histstepall.png?xxx=987878787">
 
         <br />
-        <p> <strong>Understanding the plot:</strong> <br />
-        This plot displays the distribution of suggested cooking time (in minutes) vs. the ratings for each recipe.
-        From this plot, we can see that the recipes with the highest ratings of 4.0 and 5.0 are usually the <br />
-        recipes that take less time to make.
+        <p> <strong>Understanding the histogram:</strong> <br />
+        This plot displays the distribution of the number of steps that are taken to cook the recipe. <br />
+        From this plot, we can see that most recipes tend to have about four to ten steps.
         
         </p>
 
