@@ -55,7 +55,7 @@ def barPlot():           #plot time vs rating
     plt.xlabel('Ratings (out of 5)')
     plt.ylabel('# of recipes')
 
-    plt.savefig('static/ratingsBar.png')
+    plt.savefig('static/ratingsBars.png')
     
     
     #return 'here is a linear plot that measures time (minutes) vs rating (out of 5) <br /> <a href="/">Back Home</a>'
@@ -73,7 +73,7 @@ def boxPlot():           #plot time vs rating
     plt.title("range of ingredients")
     
 
-    plt.savefig('static/boxplot_full.png')
+    plt.savefig('static/boxplot_ingredients.png')
     
     
     #return 'here is a linear plot that measures time (minutes) vs rating (out of 5) <br /> <a href="/">Back Home</a>'
@@ -291,10 +291,29 @@ def parser(filename):
 
         return items
 
+def writer(header, data, filename, option):
+        with open (filename, "w", newline = "") as csvfile:
+            if option == "write":
+
+                recipes = csv.writer(csvfile)
+                recipes.writerow(header)
+                for x in data:
+                    movies.writerow(x)
+            elif option == "update":
+                recipes = csv.DictWriter(csvfile, fieldnames = header)
+                recipes.writeheader()
+                recipes.writerows(data)
+            else:
+                print("Option is not known")
 
 
+def update(filename):
+    with open(filename, newline="") as file:
+        readData = [row for row in csv.DictReader(file)]
+        readData[0]['sex'] = 'female'
 
-    
+    readHeader = readData[0].keys()
+    writer(readHeader, readData, filename, "update")
 
 #def update(csvFile,id,name,age,sex,status):
 #    with open('test.csv', 'w', newline='') as csvfile:
