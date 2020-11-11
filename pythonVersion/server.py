@@ -173,12 +173,17 @@ def recipeResults():
 def searchingInput():
     #step 1: take in input and selected category 
     search_value = request.form['search_value']
-    category = "sex"
+    category = request.form['search_category']
+    if len(category) == 0:
+        return "Error, need a category. Return and try again."
+    print(search_value)
 
     #search through category for input. 
     items = parser('test.csv')
 
+    print(items)
     results = findRow(category, items, search_value)
+    print(results)
 
     return render_template('index.html', results=json.dumps(results))
 
@@ -246,7 +251,7 @@ def findRow(category, items, input):
     column = [sub[c] for sub in items]
     
     for r in range(len(column)):
-        if column[r] == input:
+       if column[r] == input:
             searchedItems.append({items[0][i]:items[r][i] for i in range(len(items[0]))})
 
     return searchedItems

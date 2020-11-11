@@ -180,7 +180,9 @@ color: black;
 
     <!--This is for the search button-->
     <form action="/search" method="post">
-        Search here: <input type="text" placeholder="..." name="search_value"> <br />
+        Category: <input type="text" placeholder="..." name="search_category"> <br />
+        Input: <input type="text" placeholder ="..." name="search_value"> <br />
+
         <input type="submit" name="form" value="submit" />  <br/>
         Results: {{results}} <br/>
     </form>
