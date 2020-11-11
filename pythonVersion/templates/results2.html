@@ -6,20 +6,21 @@
 
         <!--This is for visualizing plots-->
         <form action="/secondplot" method="post">
-            <p>Grabbing linear plot: <br /></p>
+            <p>Grabbing bar graph plot: <br /></p>
             <input type="submit" name="form" value="display plot" />
         </form>
 
         <p>BAR GRAPH:</p>
         
-        <img src="{{url_for('static', filename='bar.png')}}" />
+        <!--<img src="{{url_for('static', filename='ratingsBar.png')}}" />-->
+        <img src="static/ratingsBar.png?xxx=9878787661">
 
 
         <br />
         <p> <strong>Understanding the bar graph:</strong> <br />
-        This plot displays the distribution of ratings for each recipe vs. average number of ingredients
-        used for each recipe. <br /> The distribution of the data seems to very close, but we can see that 
-        the recipes with the highest ratings have the most ingredients (about 20).
+        This plot displays how many recipes have a certain rating value. Through this bar graph, we <br />
+        can see the distribution of how the prior users have rated these recipes and we can understand the <br />
+        overall quality of the recipes that are visible on our website.
         
         
         </p>

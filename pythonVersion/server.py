@@ -33,17 +33,13 @@ def sendResult3Page():
 #create a png file for each plot using function: 
 
 @app.route('/linearplot', methods = ['POST'])
-def linearPlot():           #plot time vs rating
-    time = getTime()        
-    rating = getRating()
+def linearPlot():           #plot time vs ingredients
+    steps = getSteps()        
 
-    #plt.plot(time,rating, 'g---')
-    #plt.scatter(time, rating, s=area, c=colors, alpha=0.5)
-    plt.plot(time,rating,'o',color='black')
-    plt.xlabel('Time (minutes)')
-    plt.ylabel('Rating (1-5)')
+    plt.hist(steps,density=True,bins=30)
+    plt.xlabel('# of Steps')
 
-    plt.savefig('static/linearplots1.png')
+    plt.savefig('static/histstepall.png')
     
     
     #return 'here is a linear plot that measures time (minutes) vs rating (out of 5) <br /> <a href="/">Back Home</a>'
@@ -51,17 +47,15 @@ def linearPlot():           #plot time vs rating
 
 @app.route('/secondplot', methods = ['POST'])
 def barPlot():           #plot time vs rating
-    ratings = getRating()        
-    ingredients = getIngredients()
-
-    #plt.plot(time,rating, 'g---')
-    #plt.scatter(time, rating, s=area, c=colors, alpha=0.5)
-    #plt.plot(ratings,ingredients,'o',color='black')
-    plt.bar(ratings, ingredients, color='blue')
+    ratingVals = getRatingResult()
+    #print(ratingVals)       
+    rateLabel = ['0.0','1.0','2.0','3.0','4.0','5.0']
+    #plt.bar(ratings, ingredients, color='blue')
+    plt.bar(rateLabel, ratingVals, color='blue')
     plt.xlabel('Ratings (out of 5)')
-    plt.ylabel('# of ingredients')
+    plt.ylabel('# of recipes')
 
-    plt.savefig('static/bar.png')
+    plt.savefig('static/ratingsBars.png')
     
     
     #return 'here is a linear plot that measures time (minutes) vs rating (out of 5) <br /> <a href="/">Back Home</a>'
@@ -79,7 +73,7 @@ def boxPlot():           #plot time vs rating
     plt.title("range of ingredients")
     
 
-    plt.savefig('static/boxpl.png')
+    plt.savefig('static/boxplot_ingredients.png')
     
     
     #return 'here is a linear plot that measures time (minutes) vs rating (out of 5) <br /> <a href="/">Back Home</a>'
@@ -87,69 +81,103 @@ def boxPlot():           #plot time vs rating
 
 
 
-def getAverageIngred(numRate, ratingArr, ingrArr):
-    sumIngr = 0
-    rounds = 0
-    for i, j in zip(ratingArr, ingrArr):
-        if i == numRate:
-            sumIngr += j
-        rounds += 1
-
-    averageIngr = int(sumIngr/rounds)
-    return averageIngr
-
 
 def getTime():    #get time from RAW_recipes
     with open('datasets/RAW_recipes.csv') as rawRecipes:
         recipeList = csv.DictReader(rawRecipes)
         timeList = []
-        #for recipe in recipeList:
-        #    time = int(recipe['minutes'])
-        #    timeList.append(time)
         count = 0
         for recipe in recipeList:
-            if count <= 100:
+            if count <= 200:
                 time = int(recipe['minutes'])
                 timeList.append(time)
             else:
                 break
             count += 1
-        
+
         return timeList
+      
+
+def getRatingResult():    #get rating from interactions_test
+    ratingList = getRating()
+    #print(ratingList[:20])
+    #need to find how many values have each rating value (0, 5)
+    count_0, count_1, count_2, count_3, count_4, count_5 = 0, 0, 0, 0, 0, 0
+    rateResult = []
+    for rVal in ratingList:
+        if rVal == 0.0:
+            count_0 += 1
+        elif rVal == 1.0:
+            count_1 += 1
+        elif rVal == 2.0:
+            count_2 += 1
+        elif rVal == 3.0:
+            count_3 += 1
+        elif rVal == 4.0:
+            count_4 += 1
+        else:           #rVal == 5.0
+            count_5 += 1
+    
+    rateResult.append(count_0)
+    rateResult.append(count_1)
+    rateResult.append(count_2)
+    rateResult.append(count_3)
+    rateResult.append(count_4)
+    rateResult.append(count_5)
+
+    return rateResult
+
 
 def getRating():    #get rating from interactions_test
     with open('datasets/interactions_test.csv') as iTests:
         recipeList = csv.DictReader(iTests)
         ratingValList = []
         
-        #for recipe in recipeList:
-        #    ratingVal = float(recipe['rating'])
-        #    ratingValList.append(ratingVal)
-        count = 0
         for recipe in recipeList:
-            if count <= 100:
-                ratingVal = float(recipe['rating'])
-                ratingValList.append(ratingVal)
-            else:
-                break
-            count += 1
+            ratingVal = float(recipe['rating'])
+            ratingValList.append(ratingVal)
+        
+        
 
         return ratingValList
+
+
 
 def getIngredients():
     with open('datasets/RAW_recipes.csv') as ingredients:
         ingredientsList = csv.DictReader(ingredients)
         numOfIngredients = []
-        count = 0
+        #for ingredient in ingredientsList:
+        #    ingredientVal = int(ingredient['n_ingredients'])
+        #    numOfIngredients.append(ingredientVal)
+
+
+        
+        #count = 0
         for ingredient in ingredientsList:
-            if count <= 100:
-                ingredientVal = int(ingredient['n_ingredients'])
-                numOfIngredients.append(ingredientVal)
-            else:
-                break
-            count += 1
+            ingredientVal = int(ingredient['n_ingredients'])
+            numOfIngredients.append(ingredientVal)
+            
+        
+        
         return numOfIngredients
 
+
+def getSteps():
+    with open('datasets/RAW_recipes.csv') as grabsteps:
+        allstepList = csv.DictReader(grabsteps)
+        stepList = []
+        #for ingredient in ingredientsList:
+        #    ingredientVal = int(ingredient['n_ingredients'])
+        #    numOfIngredients.append(ingredientVal)
+
+
+        for st in allstepList:
+            stVal = int(st['n_steps'])
+            stepList.append(stVal)
+            
+        
+        return stepList
 
 
 
@@ -169,6 +197,7 @@ def recipeResults():
 
 
 #For testing purposes
+
 @app.route('/search', methods=['GET','POST'])
 def searchingInput():
     #step 1: take in input and selected category 
@@ -184,6 +213,7 @@ def searchingInput():
     print(items)
     results = findRow(category, items, search_value)
     print(results)
+
 
     return render_template('index.html', results=json.dumps(results))
 
@@ -266,10 +296,29 @@ def parser(filename):
 
         return items
 
+def writer(header, data, filename, option):
+        with open (filename, "w", newline = "") as csvfile:
+            if option == "write":
+
+                recipes = csv.writer(csvfile)
+                recipes.writerow(header)
+                for x in data:
+                    movies.writerow(x)
+            elif option == "update":
+                recipes = csv.DictWriter(csvfile, fieldnames = header)
+                recipes.writeheader()
+                recipes.writerows(data)
+            else:
+                print("Option is not known")
 
 
+def update(filename):
+    with open(filename, newline="") as file:
+        readData = [row for row in csv.DictReader(file)]
+        readData[0]['sex'] = 'female'
 
-    
+    readHeader = readData[0].keys()
+    writer(readHeader, readData, filename, "update")
 
 #def update(csvFile,id,name,age,sex,status):
 #    with open('test.csv', 'w', newline='') as csvfile:
