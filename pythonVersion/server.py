@@ -411,21 +411,20 @@ def parser(filename):
         return items
 
 def writer(header, data, filename, option):
-        with open (filename, "w", newline = "") as csvfile:
-            if option == "write":
-                recipes = csv.writer(csvfile)
-                recipes.writerow(header)
-                for x in data:
-                    recipes.writerow(x)
-            elif option == "update":
-                recipes = csv.DictWriter(csvfile, fieldnames = header)
-                recipes.writeheader()
-                recipes.writerows(data)
-            else:
-                print("Option is not known")
+    with open (filename, "w", newline = "") as csvfile:
+        if option == "write":
 
-            csvfile.close()
-
+            recipes = csv.writer(csvfile)
+            recipes.writerow(header)
+            for x in data:
+                recipes.writerow(x)
+        elif option == "update":
+            recipes = csv.DictWriter(csvfile, fieldnames = header)
+            recipes.writeheader()
+            recipes.writerows(data)
+        else:
+            print("Option is not known")
+        csvfile.close()
 
 
 def update(filename):
@@ -460,7 +459,6 @@ def delete(filename):
                         write.writerows(lines)
                         wfile.close()
         file.close()
-
 
 #def update(csvFile,id,name,age,sex,status):
 #    with open('test.csv', 'w', newline='') as csvfile:
