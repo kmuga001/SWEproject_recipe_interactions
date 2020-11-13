@@ -1,10 +1,10 @@
 ID,Name,Age,sex,Status
-0000, James, 18, male, single
-0010, Holly, 22, female, married
-0076, Marry, 76, female, widowed
-8458, Jessie, 55, male, single
-6452, Murfy, 98, male, deceased
-9879, Arel, 86, female, single
-7647, Marty, 19, male, dating
-0901, Tammy, 32, female, dating
-0001, Polly, 112, male, widowed
+0000,James,18,male,single
+0010,Holly,22,female,married
+0076,Marry,76,female,widowed
+8458,Jessie,55,male,single
+6452,Murfy,98,male,deceased
+9879,Arel,86,female,single
+7647,Marty,19,male,dating
+0901,Tammy,32,female,dating
+0001,Polly,112,male,widowed

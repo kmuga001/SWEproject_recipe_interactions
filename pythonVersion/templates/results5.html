@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <h1>RESULTS5 PAGE</h1>
+        <p>This is the fifth analytics page.</p>
+
+        <!--This is for visualizing plots-->
+        <form action="/fifth" method="post">
+            <p>Grabbing histogram: <br /></p>
+            <input type="submit" name="form" value="display plot" />
+        </form>
+
+        <p>HISTOGRAM:</p>
+        
+        <!--<img src="{{url_for('static', filename='histstepall.png')}}" />-->
+        <img src="static/fivehists.png?xxx=9829656563737">
+
+        <br />
+        <p> <strong>Understanding the histogram:</strong> <br />
+        This plot displays the distribution of the number of times a particular user has given a rating of 5 stars. <br />
+        From this plot, we can see that most users gave around 0 to 50 five star ratings to recipes. 
+        
+        </p>
+
+        <br />
+
+        <!--<form action="/linearplot" method="post">
+            <p>Grabbing bar graph: <br /></p>
+            <input type="submit" name="form" value="display bar" />
+        </form>
+        <p>BAR GRAPH:</p>
+        
+        <img src="{{url_for('static', filename='linearplots3.png')}}" />-->
+
+    </body>
+</html>

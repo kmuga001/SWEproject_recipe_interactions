@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <h1>RESULTS6 PAGE</h1>
+        <p>This is the sixth analytics page.</p>
+
+        <!--This is for visualizing plots-->
+        <form action="/sixth" method="post">
+            <p>Grabbing histogram: <br /></p>
+            <input type="submit" name="form" value="display plot" />
+        </form>
+
+        <p>HISTOGRAM:</p>
+        
+        <!--<img src="{{url_for('static', filename='histstepall.png')}}" />-->
+        <img src="static/histInteracts.png?xxx=98736318373">
+
+        <br />
+        <p> <strong>Understanding the histogram:</strong> <br />
+        This plot displays the distribution of the interaction seen between users and recipes. <br />
+        From this plot, we can see that there is an even distribution of which recipes were observed by users. <br />
+        This demonstrates that many recipes are accessible for viewing on this website.
+        
+        </p>
+
+        <br />
+
+        <!--<form action="/linearplot" method="post">
+            <p>Grabbing bar graph: <br /></p>
+            <input type="submit" name="form" value="display bar" />
+        </form>
+        <p>BAR GRAPH:</p>
+        
+        <img src="{{url_for('static', filename='linearplots3.png')}}" />-->
+
+    </body>
+</html>

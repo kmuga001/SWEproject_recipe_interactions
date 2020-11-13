@@ -12,6 +12,7 @@ app=Flask(__name__)
 
 @app.route('/', methods = ['POST', 'GET'])
 def home():
+    append('test.csv')
     app.route('/', methods = ['POST', 'GET'])
     
     return render_template("index.html")
@@ -29,6 +30,18 @@ def sendResult2Page():
 @app.route('/results3/')
 def sendResult3Page():
     return render_template('results3.html')
+
+@app.route('/results4/')
+def sendResult4Page():
+    return render_template('results4.html')
+
+@app.route('/results5/')
+def sendResult5Page():
+    return render_template('results5.html')
+
+@app.route('/results6/')
+def sendResult6Page():
+    return render_template('results6.html')
 
 #create a png file for each plot using function: 
 
@@ -55,7 +68,7 @@ def barPlot():           #plot time vs rating
     plt.xlabel('Ratings (out of 5)')
     plt.ylabel('# of recipes')
 
-    plt.savefig('static/ratingsBar.png')
+    plt.savefig('static/ratingsBars.png')
     
     
     #return 'here is a linear plot that measures time (minutes) vs rating (out of 5) <br /> <a href="/">Back Home</a>'
@@ -73,16 +86,51 @@ def boxPlot():           #plot time vs rating
     plt.title("range of ingredients")
     
 
-    plt.savefig('static/boxplot_full.png')
+    plt.savefig('static/boxplot_ingredients.png')
     
     
     #return 'here is a linear plot that measures time (minutes) vs rating (out of 5) <br /> <a href="/">Back Home</a>'
     return render_template('results3.html')
 
 
+@app.route('/fourth', methods = ['POST'])
+def itemsPlot():
+    numItems = getNumItems()
+    xVals = getUserNums()
+    plt.scatter(xVals, numItems)
+    #plt.boxplot(numItems)
+    plt.title('number of recipes reviewed by users')
+
+    plt.savefig('static/items_scatter.png')
+
+    return render_template('results4.html')
 
 
-def getTime():    #get time from RAW_recipes
+@app.route('/fifth', methods = ['POST'])
+def numRatingPlot(): #how many 5 star ratings did eaach user give
+    numFive = getFiveRatings()
+    plt.hist(numFive, density=True, bins=[0,20,40,60,80,100,120,140,160,180,200,220,240,260,280,300])
+    #plt.hist(numFive, density=True, bins=15)
+    plt.title('total number of five star ratings user gave for a recipe')
+
+    plt.savefig('static/fivehists.png')
+    
+
+    return render_template('results5.html')
+
+
+@app.route('/sixth', methods = ['POST'])
+def interactPlot():
+    items_interact = getInteractArray()
+    plt.hist(items_interact, density=True, bins=40)
+    plt.xlabel('recipes that were viewed by users')
+
+    plt.savefig('static/histInteracts.png')
+
+    return render_template('results6.html')
+
+
+def getTime():    #get time from RAW_recipes, prob not used right now
     with open('datasets/RAW_recipes.csv') as rawRecipes:
         recipeList = csv.DictReader(rawRecipes)
         timeList = []
@@ -96,7 +144,73 @@ def getTime():    #get time from RAW_recipes
             count += 1
 
         return timeList
-      
+
+
+def getNumItems():
+    with open('datasets/PP_users.csv') as ppUsers:
+        user_fullList = csv.DictReader(ppUsers)
+        itemsList = []
+        
+        for iVal in user_fullList:
+            itemAppend = int(iVal['n_items'])
+            itemsList.append(itemAppend)
+        
+
+        return itemsList
+
+def getNumRatings():
+    with open('datasets/PP_users.csv') as ppUsers:
+        user_fullList = csv.DictReader(ppUsers)
+        ratingsList = []
+
+        for rVal in user_fullList:
+            rateAppend = int(rVal['n_ratings'])
+            ratingsList.append(rateAppend)
+
+        return ratingsList
+        
+def getFiveRatings():
+    with open('datasets/PP_users.csv') as ppUsers:
+        user_fullList = csv.DictReader(ppUsers)
+        fiveList = []
+
+        for fRow in user_fullList:
+            currRow = fRow['ratings'].strip('][').split(', ')
+            fiveSum = 0
+            for currVal in currRow:   
+                numVal = float(currVal)
+                if numVal == 5.0:
+                    fiveSum += 1
+            fiveList.append(fiveSum)
+
+        return fiveList
+    
+
+def getUserNums():
+    with open('datasets/PP_users.csv') as ppUsers:
+        user_fullList = csv.DictReader(ppUsers)
+        userList = []
+
+        for userRow in user_fullList:
+            userid = int(userRow['u'])
+            userList.append(userid)
+
+        return userList
+
+
+def getInteractArray():
+    with open('datasets/PP_users.csv') as ppUsers:
+        user_fullList = csv.DictReader(ppUsers)
+        itemList = []
+
+        for itemOut in user_fullList:
+            #currRow = list(itemOut['items'])
+            currRow = itemOut['items'].strip('][').split(', ')
+            for currVal in currRow:
+                itemList.append(int(currVal)) #appending value inside inner items array
+        
+        return itemList
+
 
 def getRatingResult():    #get rating from interactions_test
     ratingList = getRating()
@@ -197,30 +311,26 @@ def recipeResults():
 
 
 #For testing purposes
-<<<<<<< HEAD
-"""
-@app.route('/search', methods=['POST'])
-=======
+
 @app.route('/search', methods=['GET','POST'])
->>>>>>> 29fafc8a79d127d8d5a4b03a7284a743d47dcbbd
 def searchingInput():
     #step 1: take in input and selected category 
     search_value = request.form['search_value']
-    category = "sex"
+    category = request.form['search_category']
+    if len(category) == 0:
+        return "Error, need a category. Return and try again."
+    print(search_value)
 
     #search through category for input. 
     items = parser('test.csv')
 
+    print(items)
     results = findRow(category, items, search_value)
+    print(results)
 
-<<<<<<< HEAD
-    return render_template('results.html', results)
-    #return 'You searched for %s in the category of %s <br /> These are your results:  <br /> %s <a href="/">Back Home</a> <a href="/recipe">more info</a>' % (search_value,category,str(results))
-"""
-=======
+
     return render_template('index.html', results=json.dumps(results))
 
->>>>>>> 29fafc8a79d127d8d5a4b03a7284a743d47dcbbd
 
 @app.route('/savings', methods=['POST'])
 def saveRecipe():
@@ -285,7 +395,7 @@ def findRow(category, items, input):
     column = [sub[c] for sub in items]
     
     for r in range(len(column)):
-        if column[r] == input:
+       if column[r] == input:
             searchedItems.append({items[0][i]:items[r][i] for i in range(len(items[0]))})
 
     return searchedItems
@@ -297,13 +407,60 @@ def parser(filename):
         dataSet = csv.reader(myFile, delimiter=',', quoting=csv.QUOTE_NONE)
         for row in dataSet:#take in row at a time
             items.append(row)
-
+        myFile.close()
         return items
 
+def writer(header, data, filename, option):
+        with open (filename, "w", newline = "") as csvfile:
+            if option == "write":
+                recipes = csv.writer(csvfile)
+                recipes.writerow(header)
+                for x in data:
+                    recipes.writerow(x)
+            elif option == "update":
+                recipes = csv.DictWriter(csvfile, fieldnames = header)
+                recipes.writeheader()
+                recipes.writerows(data)
+            else:
+                print("Option is not known")
+
+            csvfile.close()
 
 
 
-    
+def update(filename):
+    with open(filename, newline="") as file:
+        readData = [row for row in csv.DictReader(file)]
+        readData[0]['sex'] = 'female'
+        file.close()
+    readHeader = readData[0].keys()
+    writer(readHeader, readData, filename, "update")
+
+
+def append(filename):
+    with open(filename, 'a', newline='') as file:
+        writer = csv.DictWriter(file, fieldnames = {'id', 'name', 'age', 'sex', 'status'})
+
+        writer.writerow({'id': "0054", 'name': "Johny", 'age': "54", 'sex': "male", 'status': "single"})
+        file.close()
+
+
+def delete(filename):
+# {('id' : "0010", 'name' : "Holly", 'age' : "22", 'sex' : "female", 'status' : "married")}
+    lines = list()
+    with open(filename, 'r') as file:
+        read = csv.reader(file)
+        for row in read:
+            lines.append(row)
+            for field in row:
+                if field == "0010, Holly, 22, female, married":
+                    lines.remove(row)
+                    with open(filename, 'w') as wfile:
+                        write = csv.writer(wfile)
+                        write.writerows(lines)
+                        wfile.close()
+        file.close()
+
 
 #def update(csvFile,id,name,age,sex,status):
 #    with open('test.csv', 'w', newline='') as csvfile:

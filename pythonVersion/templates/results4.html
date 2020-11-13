@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <h1>RESULTS4 PAGE</h1>
+        <p>This is the fourth analytics page.</p>
+
+        <!--This is for visualizing plots-->
+        <form action="/fourth" method="post">
+            <p>Grabbing scatter plot: <br /></p>
+            <input type="submit" name="form" value="display plot" />
+        </form>
+
+        <p>SCATTER PLOT:</p>
+        
+        <!--<img src="{{url_for('static', filename='histstepall.png')}}" />-->
+        <img src="static/items_scatter.png?xxx=986565655">
+
+        <br />
+        <p> <strong>Understanding the plot:</strong> <br />
+        This plot displays the distribution of the number of recipes that users have reviewed and given ratings. <br />
+        From this plot, we can see that most users gave reviews for well less than a 1000. However, there were a few <br />
+        users who have given many reviews that are outside the norm.
+        
+        </p>
+
+        <br />
+
+        <!--<form action="/linearplot" method="post">
+            <p>Grabbing bar graph: <br /></p>
+            <input type="submit" name="form" value="display bar" />
+        </form>
+        <p>BAR GRAPH:</p>
+        
+        <img src="{{url_for('static', filename='linearplots3.png')}}" />-->
+
+    </body>
+</html>
