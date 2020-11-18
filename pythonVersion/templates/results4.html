@@ -12,8 +12,7 @@
 
         <p>SCATTER PLOT:</p>
         
-        <!--<img src="{{url_for('static', filename='histstepall.png')}}" />-->
-        <img src="static/items_scatter.png?xxx=986565655">
+        <img src="{{ url_for('static', filename=graph) }}" />
 
         <br />
         <p> <strong>Understanding the plot:</strong> <br />
@@ -25,13 +24,6 @@
 
         <br />
 
-        <!--<form action="/linearplot" method="post">
-            <p>Grabbing bar graph: <br /></p>
-            <input type="submit" name="form" value="display bar" />
-        </form>
-        <p>BAR GRAPH:</p>
-        
-        <img src="{{url_for('static', filename='linearplots3.png')}}" />-->
 
     </body>
 </html>

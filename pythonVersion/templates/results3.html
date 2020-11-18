@@ -11,9 +11,8 @@
         </form>
 
         <p>Box Plot:</p>
-        
-        <!--<img src="{{url_for('static', filename='boxplot_full.png')}}" />-->
-        <img src="static/boxplot_full.png?xxx=9878787554">
+
+        <img src="{{ url_for('static', filename=graph) }}" />
 
         <br />
         <p> <strong>Understanding the box plot:</strong> <br />
@@ -29,13 +28,6 @@
 
         <br />
 
-        <!--<form action="/linearplot" method="post">
-            <p>Grabbing bar graph: <br /></p>
-            <input type="submit" name="form" value="display bar" />
-        </form>
-        <p>BAR GRAPH:</p>
-        
-        <img src="{{url_for('static', filename='linearplots3.png')}}" />-->
 
     </body>
 </html>

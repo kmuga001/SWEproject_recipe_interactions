@@ -5,15 +5,15 @@
         <p>This is the first analytics page.</p>
 
         <!--This is for visualizing plots-->
-        <form action="/linearplot" method="post">
+        <form action="/firstplot" method="post">
             <p>Grabbing histogram plot: <br /></p>
             <input type="submit" name="form" value="display plot" />
         </form>
 
         <p>HISTOGRAM:</p>
         
-        <!--<img src="{{url_for('static', filename='histstepall.png')}}" />-->
-        <img src="static/histstepall.png?xxx=987878787">
+        <img src="{{ url_for('static', filename=graph) }}" />
+        
 
         <br />
         <p> <strong>Understanding the histogram:</strong> <br />
@@ -24,13 +24,6 @@
 
         <br />
 
-        <!--<form action="/linearplot" method="post">
-            <p>Grabbing bar graph: <br /></p>
-            <input type="submit" name="form" value="display bar" />
-        </form>
-        <p>BAR GRAPH:</p>
-        
-        <img src="{{url_for('static', filename='linearplots3.png')}}" />-->
 
     </body>
 </html>

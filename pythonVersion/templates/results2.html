@@ -12,8 +12,7 @@
 
         <p>BAR GRAPH:</p>
         
-        <!--<img src="{{url_for('static', filename='ratingsBar.png')}}" />-->
-        <img src="static/ratingsBar.png?xxx=9878787661">
+        <img src="{{ url_for('static', filename=graph) }}" />
 
 
         <br />
@@ -27,13 +26,6 @@
 
         <br />
 
-        <!--<form action="/linearplot" method="post">
-            <p>Grabbing bar graph: <br /></p>
-            <input type="submit" name="form" value="display bar" />
-        </form>
-        <p>BAR GRAPH:</p>
-        
-        <img src="{{url_for('static', filename='linearplots3.png')}}" />-->
 
     </body>
 </html>

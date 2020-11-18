@@ -1,6 +1,8 @@
 from flask import Flask, render_template, url_for, request, jsonify
 import csv
 import json
+import os
+import time
 #%matplotlib inline
 import matplotlib
 matplotlib.use('Agg')
@@ -12,7 +14,9 @@ app=Flask(__name__)
 
 @app.route('/', methods = ['POST', 'GET'])
 def home():
-    append('test.csv')
+    #append('test.csv')
+    #delete('test.csv')
+    #update('test.csv')
     app.route('/', methods = ['POST', 'GET'])
     
     return render_template("index.html")
@@ -45,18 +49,25 @@ def sendResult6Page():
 
 #create a png file for each plot using function: 
 
-@app.route('/linearplot', methods = ['POST'])
+@app.route('/firstplot', methods = ['POST'])
 def linearPlot():           #plot time vs ingredients
     steps = getSteps()        
 
-    plt.hist(steps,density=True,bins=30)
+    
     plt.xlabel('# of Steps')
+    plt.title('first analytic')
+    plt.hist(steps,density=True,bins=30)
 
-    plt.savefig('static/histstepall.png')
+    newplot_name = "firstGraph" + str(time.time()) + ".png"
+
+    for filename in os.listdir('static/'):
+        if filename.startswith('firstGraph'):
+            os.remove('static/' + filename)
+
+    plt.savefig('static/' + newplot_name)
+    plt.clf()
+    return render_template("results1.html", graph=newplot_name)
     
-    
-    #return 'here is a linear plot that measures time (minutes) vs rating (out of 5) <br /> <a href="/">Back Home</a>'
-    return render_template('results1.html')
 
 @app.route('/secondplot', methods = ['POST'])
 def barPlot():           #plot time vs rating
@@ -67,12 +78,18 @@ def barPlot():           #plot time vs rating
     plt.bar(rateLabel, ratingVals, color='blue')
     plt.xlabel('Ratings (out of 5)')
     plt.ylabel('# of recipes')
+    plt.title('second analytic')
 
-    plt.savefig('static/ratingsBars.png')
+    newplot_name = "secondGraph" + str(time.time()) + ".png"
+
+    for filename in os.listdir('static/'):
+        if filename.startswith('secondGraph'):
+            os.remove('static/' + filename)
+
+    plt.savefig('static/' + newplot_name)
+    plt.clf()
+    return render_template("results2.html", graph=newplot_name)
     
-    
-    #return 'here is a linear plot that measures time (minutes) vs rating (out of 5) <br /> <a href="/">Back Home</a>'
-    return render_template('results2.html')
 
 
 @app.route('/thirdplot', methods = ['POST'])
@@ -85,12 +102,15 @@ def boxPlot():           #plot time vs rating
     plt.boxplot(ingredients)
     plt.title("range of ingredients")
     
+    newplot_name = "thirdGraph" + str(time.time()) + ".png"
 
-    plt.savefig('static/boxplot_ingredients.png')
-    
-    
-    #return 'here is a linear plot that measures time (minutes) vs rating (out of 5) <br /> <a href="/">Back Home</a>'
-    return render_template('results3.html')
+    for filename in os.listdir('static/'):
+        if filename.startswith('thirdGraph'):
+            os.remove('static/' + filename)
+
+    plt.savefig('static/' + newplot_name)
+    plt.clf()
+    return render_template("results3.html", graph=newplot_name)
 
 
 @app.route('/fourth', methods = ['POST'])
@@ -101,22 +121,36 @@ def itemsPlot():
     #plt.boxplot(numItems)
     plt.title('number of recipes reviewed by users')
 
-    plt.savefig('static/items_scatter.png')
+    newplot_name = "fourthGraph" + str(time.time()) + ".png"
 
-    return render_template('results4.html')
+    for filename in os.listdir('static/'):
+        if filename.startswith('fourthGraph'):
+            os.remove('static/' + filename)
+
+    plt.savefig('static/' + newplot_name)
+    plt.clf()
+    return render_template("results4.html", graph=newplot_name)
 
 
 @app.route('/fifth', methods = ['POST'])
 def numRatingPlot(): #how many 5 star ratings did eaach user give
     numFive = getFiveRatings()
-    plt.hist(numFive, density=True, bins=[0,20,40,60,80,100,120,140,160,180,200,220,240,260,280,300])
+    #plt.hist(numFive, density=True, bins=[0,20,40,60,80,100,120,140,160,180,200,220,240,260,280,300])
     #plt.hist(numFive, density=True, bins=15)
     plt.title('total number of five star ratings user gave for a recipe')
-
-    plt.savefig('static/fivehists.png')
+    plt.hist(numFive, density=True, bins=[0,20,40,60,80,100,120,140,160,180,200,220,240,260,280,300])
     
+    newplot_name = "fifthGraph" + str(time.time()) + ".png"
 
-    return render_template('results5.html')
+    for filename in os.listdir('static/'):
+        if filename.startswith('fifthGraph'):
+            os.remove('static/' + filename)
+
+    plt.savefig('static/' + newplot_name)
+    plt.clf()
+    return render_template("results5.html", graph=newplot_name)
+
+
 
 
 @app.route('/sixth', methods = ['POST'])
@@ -124,10 +158,16 @@ def interactPlot():
     items_interact = getInteractArray()
     plt.hist(items_interact, density=True, bins=40)
     plt.xlabel('recipes that were viewed by users')
+    plt.title('sixth analytic')
+    newplot_name = "sixthGraph" + str(time.time()) + ".png"
 
-    plt.savefig('static/histInteracts.png')
+    for filename in os.listdir('static/'):
+        if filename.startswith('sixthGraph'):
+            os.remove('static/' + filename)
 
-    return render_template('results6.html')
+    plt.savefig('static/' + newplot_name)
+    plt.clf()
+    return render_template("results6.html", graph=newplot_name)
 
 
 def getTime():    #get time from RAW_recipes, prob not used right now
@@ -430,7 +470,7 @@ def writer(header, data, filename, option):
 def update(filename):
     with open(filename, newline="") as file:
         readData = [row for row in csv.DictReader(file)]
-        readData[0]['sex'] = 'female'
+        readData[0]['sex'] = 'female' 
         file.close()
     readHeader = readData[0].keys()
     writer(readHeader, readData, filename, "update")
@@ -438,27 +478,18 @@ def update(filename):
 
 def append(filename):
     with open(filename, 'a', newline='') as file:
-        writer = csv.DictWriter(file, fieldnames = {'id', 'name', 'age', 'sex', 'status'})
+        writer = csv.DictWriter(file, fieldnames = {'ID', 'Name', 'Age', 'sex', 'Status'})
 
-        writer.writerow({'id': "0054", 'name': "Johny", 'age': "54", 'sex': "male", 'status': "single"})
+        writer.writerow({'ID': "0054", 'Name': "Johny", 'Age': "54", 'sex': "male", 'Status': "single"})
         file.close()
-
 
 def delete(filename):
-# {('id' : "0010", 'name' : "Holly", 'age' : "22", 'sex' : "female", 'status' : "married")}
-    lines = list()
-    with open(filename, 'r') as file:
-        read = csv.reader(file)
-        for row in read:
-            lines.append(row)
-            for field in row:
-                if field == "0010, Holly, 22, female, married":
-                    lines.remove(row)
-                    with open(filename, 'w') as wfile:
-                        write = csv.writer(wfile)
-                        write.writerows(lines)
-                        wfile.close()
-        file.close()
+    with open(filename, 'r') as inp, open('test1.csv', 'w') as out:
+        writer = csv.writer(out)
+        for row in csv.reader(inp):
+            if row[0] != "0000":
+                writer.writerow(row)
+    os.rename('test1.csv', filename)
 
 #def update(csvFile,id,name,age,sex,status):
 #    with open('test.csv', 'w', newline='') as csvfile:

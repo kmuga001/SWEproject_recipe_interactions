@@ -12,8 +12,7 @@
 
         <p>HISTOGRAM:</p>
         
-        <!--<img src="{{url_for('static', filename='histstepall.png')}}" />-->
-        <img src="static/histInteracts.png?xxx=98736318373">
+        <img src="{{ url_for('static', filename=graph) }}" />
 
         <br />
         <p> <strong>Understanding the histogram:</strong> <br />
@@ -25,13 +24,7 @@
 
         <br />
 
-        <!--<form action="/linearplot" method="post">
-            <p>Grabbing bar graph: <br /></p>
-            <input type="submit" name="form" value="display bar" />
-        </form>
-        <p>BAR GRAPH:</p>
         
-        <img src="{{url_for('static', filename='linearplots3.png')}}" />-->
 
     </body>
 </html>
