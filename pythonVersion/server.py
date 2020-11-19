@@ -12,9 +12,10 @@ import matplotlib.pyplot as plt
 
 app=Flask(__name__)
 
+
 @app.route('/', methods = ['POST', 'GET'])
 def home():
-    #append('test.csv')
+    append('test.csv')
     #delete('test.csv')
     #update('test.csv')
     app.route('/', methods = ['POST', 'GET'])
@@ -51,12 +52,12 @@ def sendResult6Page():
 
 @app.route('/firstplot', methods = ['POST'])
 def linearPlot():           #plot time vs ingredients
-    steps = getSteps()        
+    #steps = getSteps()        
 
     
     plt.xlabel('# of Steps')
     plt.title('first analytic')
-    plt.hist(steps,density=True,bins=30)
+    plt.hist(globalSteps,density=True,bins=30)
 
     newplot_name = "firstGraph" + str(time.time()) + ".png"
 
@@ -94,12 +95,12 @@ def barPlot():           #plot time vs rating
 
 @app.route('/thirdplot', methods = ['POST'])
 def boxPlot():           #plot time vs rating
-    ingredients = getIngredients()        
+    #ingredients = getIngredients()        
 
     #plt.plot(time,rating, 'g---')
     #plt.scatter(time, rating, s=area, c=colors, alpha=0.5)
     #plt.plot(ratings,ingredients,'o',color='black')
-    plt.boxplot(ingredients)
+    plt.boxplot(globalIngredient)
     plt.title("range of ingredients")
     
     newplot_name = "thirdGraph" + str(time.time()) + ".png"
@@ -478,10 +479,13 @@ def update(filename):
 
 def append(filename):
     with open(filename, 'a', newline='') as file:
-        writer = csv.DictWriter(file, fieldnames = {'ID', 'Name', 'Age', 'sex', 'Status'})
+        field = ['ID', 'Name', 'Age', 'sex', 'Status']
+        writer = csv.DictWriter(file, fieldnames = field)
 
         writer.writerow({'ID': "0054", 'Name': "Johny", 'Age': "54", 'sex': "male", 'Status': "single"})
         file.close()
+  
+    
 
 def delete(filename):
     with open(filename, 'r') as inp, open('test1.csv', 'w') as out:
@@ -520,6 +524,8 @@ def delete(filename):
 #         writer.writerows(edited_rows) 
 
 if __name__=="__main__":
+    globalIngredient = getIngredients()
+    globalSteps = getSteps()
     app.run(debug=True)
 
 
