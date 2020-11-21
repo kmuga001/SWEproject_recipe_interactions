@@ -15,9 +15,9 @@ app=Flask(__name__)
 
 @app.route('/', methods = ['POST', 'GET'])
 def home():
-    append('test.csv')
+    #append('test.csv')
     #delete('test.csv')
-    #update('test.csv')
+    #update('datasets/interactions_test.csv')
     app.route('/', methods = ['POST', 'GET'])
     
     return render_template("index.html")
@@ -73,6 +73,12 @@ def linearPlot():           #plot time vs ingredients
 @app.route('/secondplot', methods = ['POST'])
 def barPlot():           #plot time vs rating
     ratingVals = getRatingResult()
+    count0 = str(ratingVals[0])
+    count1 = str(ratingVals[1])
+    count2 = str(ratingVals[2])
+    count3 = str(ratingVals[3])
+    count4 = str(ratingVals[4])
+    count5 = str(ratingVals[5])
     #print(ratingVals)       
     rateLabel = ['0.0','1.0','2.0','3.0','4.0','5.0']
     #plt.bar(ratings, ingredients, color='blue')
@@ -89,7 +95,7 @@ def barPlot():           #plot time vs rating
 
     plt.savefig('static/' + newplot_name)
     plt.clf()
-    return render_template("results2.html", graph=newplot_name)
+    return render_template("results2.html", graph=newplot_name, value0=count0, value1=count1, value2=count2, value3=count3, value4=count4, value5=count5)
     
 
 
@@ -279,6 +285,7 @@ def getRatingResult():    #get rating from interactions_test
     rateResult.append(count_3)
     rateResult.append(count_4)
     rateResult.append(count_5)
+    print(count_4)
 
     return rateResult
 
@@ -468,64 +475,73 @@ def writer(header, data, filename, option):
         csvfile.close()
 
 
-def update(filename):
+@app.route('/updateRow', methods=['POST'])
+def userUpdate():
+    rowNum = request.form['rowNum']
+    newVal = request.form['newVal']
+    update('datasets/interactions_test.csv', int(rowNum), newVal)
+    return 'You updated the rating for a recipe. <br /> <a href="/">Back Home</a>'
+
+
+def update(filename, rowNum, newVal):
     with open(filename, newline="") as file:
         readData = [row for row in csv.DictReader(file)]
-        readData[0]['sex'] = 'female' 
+        readData[rowNum]['rating'] = newVal 
         file.close()
     readHeader = readData[0].keys()
     writer(readHeader, readData, filename, "update")
 
 
-def append(filename):
+@app.route('/appendRow', methods=['POST'])
+def userAppend():
+    user_id = request.form['user_id']
+    rec_id = request.form['rec_id']
+    date = request.form['date']
+    rating = request.form['rating']
+    u_ = request.form['u_']
+    i_ = request.form['i_']
+    append('datasets/interactions_test.csv', user_id, rec_id, date, rating, u_, i_)
+    return 'You appended a row. <br /> <a href="/">Back Home</a>'
+
+
+def append(filename, user_id, rec_id, date, rating, u_, i_):
     with open(filename, 'a', newline='') as file:
-        field = ['ID', 'Name', 'Age', 'sex', 'Status']
+        field = ['user_id', 'recipe_id', 'date', 'rating', 'u', 'i']
         writer = csv.DictWriter(file, fieldnames = field)
+        uidVal = user_id
+        ridVal = rec_id
+        dateVal = date
+        rateVal = rating
+        uVal = u_
+        iVal = i_
 
-        writer.writerow({'ID': "0054", 'Name': "Johny", 'Age': "54", 'sex': "male", 'Status': "single"})
+        writer.writerow({'user_id': uidVal, 'recipe_id': ridVal, 'date': dateVal, 'rating': rateVal, 'u': uVal, 'i': iVal})
         file.close()
-  
-    
 
-def delete(filename):
+
+@app.route('/deleteRow', methods=['POST'])
+def userDelete():
+    user_id = request.form['user_id']
+    delete('datasets/interactions_test.csv', user_id)
+    return 'You deleted a row. <br /> <a href="/">Back Home</a>'
+
+
+def delete(filename, userid):
     with open(filename, 'r') as inp, open('test1.csv', 'w') as out:
         writer = csv.writer(out)
         for row in csv.reader(inp):
-            if row[0] != "0000":
+            #if row[0] != "9999":
+            if row[0] != userid:
                 writer.writerow(row)
     os.rename('test1.csv', filename)
 
-#def update(csvFile,id,name,age,sex,status):
-#    with open('test.csv', 'w', newline='') as csvfile:
-#        fieldnames = ['id', 'name', 'age', 'sex', 'status']
-#        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
-#        writer.writeheader()
-#        writer.writerow({'id': '1111', 'name': 'Marvin', 'age': '50', 'sex': 'male', 'status': 'single'})
-#        writer.writerow({'id': '1786', 'name': 'Kieth', 'age': '52', 'sex': 'male', 'status': 'married'})
-#        writer.writerow({'id': '7857', 'name': 'Elizabeth', 'age': '22', 'sex': 'female', 'status': 'dating'})
-
-#   edited_rows = []
-#     edits = {   # a dictionary of changes to make, find 'key' substitue with 'value'
-#         '0000, James, 18, male, single' : '0000, Cartman, 19, male, single'
-
-#         }
-
-#     with open('test.csv', 'rb') as file:
-#         reader = csv.reader(file)
-#         for row in reader:
-#             edited_row = row      #takes the row and copies it
-#             for key in edits.items(): #iterate through edits
-#                 edited_row = [ x.replace(key, value) for x in edited_row ] #changes values in row
-#             edited_rows.append(edited_row) # add the modified rows
-
-#     with open('test.csv', 'wb') as f: #Updates old file with new rows
-#         writer = csv.writer(f)
-#         writer.writerows(edited_rows) 
 
 if __name__=="__main__":
     globalIngredient = getIngredients()
+    #globalIngredient = []
     globalSteps = getSteps()
+    #globalSteps = []
     app.run(debug=True)
 
 
