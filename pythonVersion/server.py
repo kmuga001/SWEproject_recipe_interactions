@@ -11,6 +11,17 @@ import matplotlib.pyplot as plt
 
 
 app=Flask(__name__)
+appendNum = 0
+originalLen = 0
+delCheck = False
+upCheck = False
+getRatingRes = False
+count0 = 0
+count1 = 0
+count2 = 0
+count3 = 0
+count4 = 0
+count5 = 0
 
 
 @app.route('/', methods = ['POST', 'GET'])
@@ -54,7 +65,6 @@ def sendResult6Page():
 def linearPlot():           #plot time vs ingredients
     #steps = getSteps()        
 
-    
     plt.xlabel('# of Steps')
     plt.title('first analytic')
     plt.hist(globalSteps,density=True,bins=30)
@@ -69,10 +79,11 @@ def linearPlot():           #plot time vs ingredients
     plt.clf()
     return render_template("results1.html", graph=newplot_name)
     
-
+"""
 @app.route('/secondplot', methods = ['POST'])
 def barPlot():           #plot time vs rating
     ratingVals = getRatingResult()
+    global count0, count1, count2, count3, count4, count5
     count0 = str(ratingVals[0])
     count1 = str(ratingVals[1])
     count2 = str(ratingVals[2])
@@ -96,7 +107,42 @@ def barPlot():           #plot time vs rating
     plt.savefig('static/' + newplot_name)
     plt.clf()
     return render_template("results2.html", graph=newplot_name, value0=count0, value1=count1, value2=count2, value3=count3, value4=count4, value5=count5)
-    
+"""    
+
+@app.route('/secondplot', methods = ['POST'])
+def barPlot():           #plot time vs rating
+    global appendNum, originalLen, delCheck, upCheck
+    ratingVals = getFinalRatingResult()
+    count_0 = str(ratingVals[0])
+    count_1 = str(ratingVals[1])
+    count_2 = str(ratingVals[2])
+    count_3 = str(ratingVals[3])
+    count_4 = str(ratingVals[4])
+    count_5 = str(ratingVals[5])
+    #print(ratingVals)       
+    rateLabel = ['0.0','1.0','2.0','3.0','4.0','5.0']
+    #plt.bar(ratings, ingredients, color='blue')
+    plt.bar(rateLabel, ratingVals, color='blue')
+    plt.xlabel('Ratings (out of 5)')
+    plt.ylabel('# of recipes')
+    plt.title('second analytic')
+
+    newplot_name = "secondGraph" + str(time.time()) + ".png"
+
+    for filename in os.listdir('static/'):
+        if filename.startswith('secondGraph'):
+            os.remove('static/' + filename)
+
+    plt.savefig('static/' + newplot_name)
+    plt.clf()
+    #clear
+    appendNum = 0
+    originalLen = getFileLength('datasets/interactions_test.csv')
+    delCheck = False
+    upCheck = False
+    return render_template("results2.html", graph=newplot_name, value0=count_0, value1=count_1, value2=count_2, value3=count_3, value4=count_4, value5=count_5)
+
+
 
 
 @app.route('/thirdplot', methods = ['POST'])
@@ -259,11 +305,103 @@ def getInteractArray():
         return itemList
 
 
-def getRatingResult():    #get rating from interactions_test
+def getFinalRatingResult():
+    finalList = []
+    global count0, count1, count2, count3, count4, count5, getRatingRes, delCheck, upCheck, appendNum
+    if delCheck == True or upCheck == True: 
+         finalList = getRatingResult(0,0,0,0,0,0)
+         count0 = finalList[0]
+         count1 = finalList[1]
+         count2 = finalList[2]
+         count3 = finalList[3]
+         count4 = finalList[4]
+         count5 = finalList[5]
+         print('DELCHECK: ')
+         print(count0)
+    elif appendNum > 0:
+        #need to only go through last appendNum rows of file, use global count variables to append
+        print('BEFOREAPPEND:')
+        print(count0)
+        if getRatingRes == False: 
+            finalList = getRatingResult(count0, count1, count2, count3, count4, count5)
+            count0 = finalList[0]
+            count1 = finalList[1]
+            count2 = finalList[2]
+            count3 = finalList[3]
+            count4 = finalList[4]
+            count5 = finalList[5]
+        else:
+            with open("datasets/interactions_test.csv") as filename:
+                tempList = list(csv.DictReader(filename))
+                #reverse iteration to get last few rows
+                tempAppendCount = appendNum
+                countList = []
+                for revRow in reversed(tempList):
+                    #revRow = list(revRow)
+                    if(tempAppendCount > 0):
+                        tempVal = float(revRow['rating'])
+                        countList.append(tempVal)
+                    else:
+                        break
+
+                    tempAppendCount -= 1
+
+
+                for rVal in countList: #sort out counts
+                    if rVal == 0.0:
+                        count0 += 1
+                    elif rVal == 1.0:
+                        count1 += 1
+                    elif rVal == 2.0:
+                        count2 += 1
+                    elif rVal == 3.0:
+                        count3 += 1
+                    elif rVal == 4.0:
+                        count4 += 1
+                    else:           #rVal == 5.0
+                        count5 += 1
+
+                finalList.append(count0)
+                finalList.append(count1)
+                finalList.append(count2)
+                finalList.append(count3)
+                finalList.append(count4)
+                finalList.append(count5) 
+
+        print('CHECKAPPEND:')
+        print(finalList)
+
+    else: 
+        print('BEFOREELSE:')
+        print(count0)
+        
+        if getRatingRes == False: 
+            finalList = getRatingResult(count0, count1, count2, count3, count4, count5)
+            count0 = finalList[0]
+            count1 = finalList[1]
+            count2 = finalList[2]
+            count3 = finalList[3]
+            count4 = finalList[4]
+            count5 = finalList[5]
+        else:
+            finalList.append(count0)
+            finalList.append(count1)
+            finalList.append(count2)
+            finalList.append(count3)
+            finalList.append(count4)
+            finalList.append(count5) 
+        print('ELSECHECK:')
+        print(finalList)
+
+    return finalList
+
+
+def getRatingResult(c0, c1, c2, c3, c4, c5):    #get rating from interactions_test
     ratingList = getRating()
+    global getRatingRes
     #print(ratingList[:20])
     #need to find how many values have each rating value (0, 5)
-    count_0, count_1, count_2, count_3, count_4, count_5 = 0, 0, 0, 0, 0, 0
+    count_0, count_1, count_2, count_3, count_4, count_5 = c0, c1, c2, c3, c4, c5
     rateResult = []
     for rVal in ratingList:
         if rVal == 0.0:
@@ -285,8 +423,8 @@ def getRatingResult():    #get rating from interactions_test
     rateResult.append(count_3)
     rateResult.append(count_4)
     rateResult.append(count_5)
-    print(count_4)
-
+    
+    getRatingRes = True
     return rateResult
 
 
@@ -477,9 +615,11 @@ def writer(header, data, filename, option):
 
 @app.route('/updateRow', methods=['POST'])
 def userUpdate():
+    global upCheck
     rowNum = request.form['rowNum']
     newVal = request.form['newVal']
     update('datasets/interactions_test.csv', int(rowNum), newVal)
+    upCheck = True
     return 'You updated the rating for a recipe. <br /> <a href="/">Back Home</a>'
 
 
@@ -494,6 +634,7 @@ def update(filename, rowNum, newVal):
 
 @app.route('/appendRow', methods=['POST'])
 def userAppend():
+    global appendNum
     user_id = request.form['user_id']
     rec_id = request.form['rec_id']
     date = request.form['date']
@@ -501,6 +642,8 @@ def userAppend():
     u_ = request.form['u_']
     i_ = request.form['i_']
     append('datasets/interactions_test.csv', user_id, rec_id, date, rating, u_, i_)
+    appendNum += 1
+    print(appendNum)
     return 'You appended a row. <br /> <a href="/">Back Home</a>'
 
 
@@ -527,6 +670,7 @@ def userDelete():
 
 
 def delete(filename, userid):
+    global originalLen, delCheck
     with open(filename, 'r') as inp, open('test1.csv', 'w') as out:
         writer = csv.writer(out)
         for row in csv.reader(inp):
@@ -534,14 +678,29 @@ def delete(filename, userid):
             if row[0] != userid:
                 writer.writerow(row)
     os.rename('test1.csv', filename)
+    originalLen = getFileLength(filename)
+    delCheck = True
+    print(originalLen)
+
+
+def getFileLength(filename):
+    with open(filename) as f:
+        templist = csv.DictReader(f)
+        return sum(1 for line in templist)
+
 
 
 
 if __name__=="__main__":
-    globalIngredient = getIngredients()
-    #globalIngredient = []
-    globalSteps = getSteps()
-    #globalSteps = []
+    #globalIngredient = getIngredients()
+    globalIngredient = []
+    #globalSteps = getSteps()
+    globalSteps = []
+    #global interactLength
+    originalLen = getFileLength('datasets/interactions_test.csv')
+    #interactLength = getFileLength('datasets/interactions_test.csv')
+    print('here is interaction test first length:')
+    print(originalLen)
     app.run(debug=True)
 
 
