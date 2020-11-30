@@ -23,6 +23,30 @@ def home():
     return render_template("index.html")
 
 
+@app.route('/recipe/<Name>',methods = ['POST', 'GET'])
+def buildRecipePage(Name):
+    items = parser('test.csv')
+    results = findRow("Name",items,Name)
+    print(results)
+    return render_template('recipe.html', results = json.dumps(results))
+
+
+def findNames(category, items, input):
+    c = []
+    searchedItems = []
+    index = items[0].index(category)
+    name = items[0].index("Name")
+    
+    c = [sub[index] for sub in items]
+    n = [sub[name] for sub in items]
+    c.pop(0)
+    n.pop(0)
+
+    for i in range(len(c)):
+        if c[i] == input:
+            searchedItems.append(n[i])
+
+    return searchedItems
 
 @app.route('/results1/')
 def sendResultPage():
@@ -69,7 +93,6 @@ def linearPlot():           #plot time vs ingredients
     plt.clf()
     return render_template("results1.html", graph=newplot_name)
     
-
 @app.route('/secondplot', methods = ['POST'])
 def barPlot():           #plot time vs rating
     ratingVals = getRatingResult()
@@ -90,8 +113,6 @@ def barPlot():           #plot time vs rating
     plt.savefig('static/' + newplot_name)
     plt.clf()
     return render_template("results2.html", graph=newplot_name)
-    
-
 
 @app.route('/thirdplot', methods = ['POST'])
 def boxPlot():           #plot time vs rating
@@ -113,7 +134,6 @@ def boxPlot():           #plot time vs rating
     plt.clf()
     return render_template("results3.html", graph=newplot_name)
 
-
 @app.route('/fourth', methods = ['POST'])
 def itemsPlot():
     numItems = getNumItems()
@@ -131,7 +151,6 @@ def itemsPlot():
     plt.savefig('static/' + newplot_name)
     plt.clf()
     return render_template("results4.html", graph=newplot_name)
-
 
 @app.route('/fifth', methods = ['POST'])
 def numRatingPlot(): #how many 5 star ratings did eaach user give
@@ -152,8 +171,6 @@ def numRatingPlot(): #how many 5 star ratings did eaach user give
     return render_template("results5.html", graph=newplot_name)
 
 
-
-
 @app.route('/sixth', methods = ['POST'])
 def interactPlot():
     items_interact = getInteractArray()
@@ -170,7 +187,6 @@ def interactPlot():
     plt.clf()
     return render_template("results6.html", graph=newplot_name)
 
-
 def getTime():    #get time from RAW_recipes, prob not used right now
     with open('datasets/RAW_recipes.csv') as rawRecipes:
         recipeList = csv.DictReader(rawRecipes)
@@ -185,7 +201,6 @@ def getTime():    #get time from RAW_recipes, prob not used right now
             count += 1
 
         return timeList
-
 
 def getNumItems():
     with open('datasets/PP_users.csv') as ppUsers:
@@ -226,7 +241,6 @@ def getFiveRatings():
 
         return fiveList
     
-
 def getUserNums():
     with open('datasets/PP_users.csv') as ppUsers:
         user_fullList = csv.DictReader(ppUsers)
@@ -237,7 +251,6 @@ def getUserNums():
             userList.append(userid)
 
         return userList
-
 
 def getInteractArray():
     with open('datasets/PP_users.csv') as ppUsers:
@@ -251,7 +264,6 @@ def getInteractArray():
                 itemList.append(int(currVal)) #appending value inside inner items array
         
         return itemList
-
 
 def getRatingResult():    #get rating from interactions_test
     ratingList = getRating()
@@ -282,7 +294,6 @@ def getRatingResult():    #get rating from interactions_test
 
     return rateResult
 
-
 def getRating():    #get rating from interactions_test
     with open('datasets/interactions_test.csv') as iTests:
         recipeList = csv.DictReader(iTests)
@@ -295,8 +306,6 @@ def getRating():    #get rating from interactions_test
         
 
         return ratingValList
-
-
 
 def getIngredients():
     with open('datasets/RAW_recipes.csv') as ingredients:
@@ -335,9 +344,6 @@ def getSteps():
         return stepList
 
 
-
-
-
 @app.route('/results', methods = ['POST', 'GET'])
 def recipeResults():
     app.route('/results', methods = ['POST', 'GET'])
@@ -360,17 +366,12 @@ def searchingInput():
     category = request.form['search_category']
     if len(category) == 0:
         return "Error, need a category. Return and try again."
-    print(search_value)
 
     #search through category for input. 
     items = parser('test.csv')
-
-    print(items)
-    results = findRow(category, items, search_value)
-    print(results)
-
-
-    return render_template('index.html', results=json.dumps(results))
+    results = findNames(category, items, search_value)
+    s = json.dumps(results)
+    return render_template('index.html', results=s)
 
 
 @app.route('/savings', methods=['POST'])
@@ -485,7 +486,6 @@ def append(filename):
         writer.writerow({'ID': "0054", 'Name': "Johny", 'Age': "54", 'sex': "male", 'Status': "single"})
         file.close()
   
-    
 
 def delete(filename):
     with open(filename, 'r') as inp, open('test1.csv', 'w') as out:

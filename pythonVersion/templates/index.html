@@ -131,41 +131,17 @@ color: black;
 
     </div>
   </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     
 </head>
     
-<script>
-    /*     fetch('/search').then(function(response) {
-                console.log("response is", response)
-               return response.json()
-           }).then(function(res){ 
-               document.getElementById("searchResponse").innerHTML = res;
-           }).catch(err => console.log(err));  */
-        var results = {results}
-       </script> 
     
 <body>
         
 	<style>
      body {background-color:rgb(159, 155, 219)}
     </style>
-  
-    <!--     
-    <div>
-  
-        <input type="text" id="searchBar" placeholder="Search Here for Recipes...">
-        <button type="submit" onclick="Search()"><i class="fa fa-search"></i></button>
 
-        
-        <a href=”/your_flask_funtion”><input type=”button” value=”call_flask_funtion”></a> 
-        <button action="/upload/">Klik</button>
-
-        <form class = "submit" action = "action_page.php">
-            <input type = "text" placeholder="search..." name = "searchbar">
-            <button type = "submit"><i class = "fa fa-search"></i></button>
-        </form>
-        
-    </div> -->
     
     <div>
         <h1>HOME PAGE</h1>
@@ -183,8 +159,10 @@ color: black;
         Category: <input type="text" placeholder="..." name="search_category"> <br />
         Input: <input type="text" placeholder ="..." name="search_value"> <br />
 
-        <input type="submit" name="form" value="submit" />  <br/>
-        Results: {{results}} <br/>
+        <input type="submit" name="form" value="search" />  <br/>
+
+        <div id = "result_urls"></div>
+        
     </form>
 
 
@@ -211,6 +189,22 @@ color: black;
 
 </body>
 
+<script>
+    var id = JSON.parse('{{ results | safe }}')
+    console.log(id);
+    var i = 0;
+    var list = "";
 
+    for (i = 0; i < id.length; i++){
+        console.log(id[i])
+
+            list += "<a target='blank' href='http://localhost:5000/recipe/" + id[i] + "'>" + id[i] + "</a><br>";
+
+    }
+    document.getElementById("result_urls").innerHTML = list;
+
+    
+    
+</script> 
 
 </html>
