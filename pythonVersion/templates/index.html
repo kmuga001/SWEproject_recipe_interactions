@@ -123,10 +123,16 @@ color: black;
         </button>
         <div class="menu-content">
             <a href="./">Home</a>
-            <a href="./top_recipes.html">Top Recipes</a>
+            <a href="./toprecipes.html">Top Recipes</a>
             <a href="./under100cal.html">Under 100 Cal</a>
             <a href="./searchhistory.html">Search History</a>
             <a href="./savedrecipes.html">Saved Recipes</a>
+            <a href="./results1/">Analytic 1</a>
+            <a href="./results2/">Analytic 2</a>
+            <a href="./results3/">Analytic 3</a>
+            <a href="./results4/">Analytic 4</a>
+            <a href="./results5/">Analytic 5</a>
+            <a href="./results6/">Analytic 6</a>
         </div>
 
     </div>
@@ -172,7 +178,7 @@ color: black;
 
     <!--This is for the saved recipes-->
     <form action="/savings" method="post">
-        <p>To save a specific recipe, please input that recipe's id: <br /></p>
+        <label>To save a specific recipe, please input that recipe's id: </label>
         <input type="text" placeholder="input the recipe id..." name="savedRecipe_id"/>
         <input type="submit" name="form" value="submit" />
     </form>
@@ -185,6 +191,40 @@ color: black;
         <label>clear your saved recipes: </label>
         <input type="submit" name="form" value="Clear Saved Recipes" />
     </form>
+
+    <br />
+
+    <!--This is for appending a row-->
+    <form action="/appendRow" method="post">
+        <label>Append a row: </label>
+        <input type="text" placeholder="input the user id..." name="user_id"/>
+        <input type="text" placeholder="input the recipe id..." name="rec_id"/>
+        <input type="text" placeholder="input date (xxxx-xx-xx)..." name="date"/>
+        <input type="text" placeholder="input the rating..." name="rating"/>
+        <input type="text" placeholder="input u..." name="u_"/>
+        <input type="text" placeholder="input the i..." name="i_"/>
+        <input type="submit" name="form" value="Append" />
+    </form>
+
+
+    <br />
+    <!--this is for deleting a row-->
+    <form action="/deleteRow" method="post">
+        <label>Delete a row: </label>
+        <input type="text" placeholder="input the user id..." name="user_id"/>
+        <input type="submit" name="form" value="Delete" />
+    </form>
+
+
+    <br />
+
+    <form action="/updateRow" method="post">
+        <label>Update the rating for a recipe: </label>
+        <input type="text" placeholder="input the row number..." name="rowNum"/>
+        <input type="text" placeholder="input new rating..." name="newVal"/>
+        <input type="submit" name="form" value="Update Rating" />
+    </form>
+
 
 
 </body>

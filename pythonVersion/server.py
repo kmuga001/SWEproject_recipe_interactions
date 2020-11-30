@@ -11,13 +11,24 @@ import matplotlib.pyplot as plt
 
 
 app=Flask(__name__)
+appendNum = 0
+originalLen = 0
+delCheck = False
+upCheck = False
+getRatingRes = False
+count0 = 0
+count1 = 0
+count2 = 0
+count3 = 0
+count4 = 0
+count5 = 0
 
 
 @app.route('/', methods = ['POST', 'GET'])
 def home():
-    append('test.csv')
+    #append('test.csv')
     #delete('test.csv')
-    #update('test.csv')
+    #update('datasets/interactions_test.csv')
     app.route('/', methods = ['POST', 'GET'])
     
     return render_template("index.html")
@@ -78,7 +89,6 @@ def sendResult6Page():
 def linearPlot():           #plot time vs ingredients
     #steps = getSteps()        
 
-    
     plt.xlabel('# of Steps')
     plt.title('first analytic')
     plt.hist(globalSteps,density=True,bins=30)
@@ -93,9 +103,17 @@ def linearPlot():           #plot time vs ingredients
     plt.clf()
     return render_template("results1.html", graph=newplot_name)
     
+"""
 @app.route('/secondplot', methods = ['POST'])
 def barPlot():           #plot time vs rating
     ratingVals = getRatingResult()
+    global count0, count1, count2, count3, count4, count5
+    count0 = str(ratingVals[0])
+    count1 = str(ratingVals[1])
+    count2 = str(ratingVals[2])
+    count3 = str(ratingVals[3])
+    count4 = str(ratingVals[4])
+    count5 = str(ratingVals[5])
     #print(ratingVals)       
     rateLabel = ['0.0','1.0','2.0','3.0','4.0','5.0']
     #plt.bar(ratings, ingredients, color='blue')
@@ -112,7 +130,44 @@ def barPlot():           #plot time vs rating
 
     plt.savefig('static/' + newplot_name)
     plt.clf()
-    return render_template("results2.html", graph=newplot_name)
+    return render_template("results2.html", graph=newplot_name, value0=count0, value1=count1, value2=count2, value3=count3, value4=count4, value5=count5)
+"""    
+
+@app.route('/secondplot', methods = ['POST'])
+def barPlot():           #plot time vs rating
+    global appendNum, originalLen, delCheck, upCheck
+    ratingVals = getFinalRatingResult()
+    count_0 = str(ratingVals[0])
+    count_1 = str(ratingVals[1])
+    count_2 = str(ratingVals[2])
+    count_3 = str(ratingVals[3])
+    count_4 = str(ratingVals[4])
+    count_5 = str(ratingVals[5])
+    #print(ratingVals)       
+    rateLabel = ['0.0','1.0','2.0','3.0','4.0','5.0']
+    #plt.bar(ratings, ingredients, color='blue')
+    plt.bar(rateLabel, ratingVals, color='blue')
+    plt.xlabel('Ratings (out of 5)')
+    plt.ylabel('# of recipes')
+    plt.title('second analytic')
+
+    newplot_name = "secondGraph" + str(time.time()) + ".png"
+
+    for filename in os.listdir('static/'):
+        if filename.startswith('secondGraph'):
+            os.remove('static/' + filename)
+
+    plt.savefig('static/' + newplot_name)
+    plt.clf()
+    #clear
+    appendNum = 0
+    originalLen = getFileLength('datasets/interactions_test.csv')
+    delCheck = False
+    upCheck = False
+    return render_template("results2.html", graph=newplot_name, value0=count_0, value1=count_1, value2=count_2, value3=count_3, value4=count_4, value5=count_5)
+
+
+
 
 @app.route('/thirdplot', methods = ['POST'])
 def boxPlot():           #plot time vs rating
@@ -265,11 +320,104 @@ def getInteractArray():
         
         return itemList
 
-def getRatingResult():    #get rating from interactions_test
+
+def getFinalRatingResult():
+    finalList = []
+    global count0, count1, count2, count3, count4, count5, getRatingRes, delCheck, upCheck, appendNum
+    if delCheck == True or upCheck == True: 
+         finalList = getRatingResult(0,0,0,0,0,0)
+         count0 = finalList[0]
+         count1 = finalList[1]
+         count2 = finalList[2]
+         count3 = finalList[3]
+         count4 = finalList[4]
+         count5 = finalList[5]
+         print('DELCHECK: ')
+         print(count0)
+    elif appendNum > 0:
+        #need to only go through last appendNum rows of file, use global count variables to append
+        print('BEFOREAPPEND:')
+        print(count0)
+        if getRatingRes == False: 
+            finalList = getRatingResult(count0, count1, count2, count3, count4, count5)
+            count0 = finalList[0]
+            count1 = finalList[1]
+            count2 = finalList[2]
+            count3 = finalList[3]
+            count4 = finalList[4]
+            count5 = finalList[5]
+        else:
+            with open("datasets/interactions_test.csv") as filename:
+                tempList = list(csv.DictReader(filename))
+                #reverse iteration to get last few rows
+                tempAppendCount = appendNum
+                countList = []
+                for revRow in reversed(tempList):
+                    #revRow = list(revRow)
+                    if(tempAppendCount > 0):
+                        tempVal = float(revRow['rating'])
+                        countList.append(tempVal)
+                    else:
+                        break
+
+                    tempAppendCount -= 1
+
+
+                for rVal in countList: #sort out counts
+                    if rVal == 0.0:
+                        count0 += 1
+                    elif rVal == 1.0:
+                        count1 += 1
+                    elif rVal == 2.0:
+                        count2 += 1
+                    elif rVal == 3.0:
+                        count3 += 1
+                    elif rVal == 4.0:
+                        count4 += 1
+                    else:           #rVal == 5.0
+                        count5 += 1
+
+                finalList.append(count0)
+                finalList.append(count1)
+                finalList.append(count2)
+                finalList.append(count3)
+                finalList.append(count4)
+                finalList.append(count5) 
+
+        print('CHECKAPPEND:')
+        print(finalList)
+
+    else: 
+        print('BEFOREELSE:')
+        print(count0)
+        
+        if getRatingRes == False: 
+            finalList = getRatingResult(count0, count1, count2, count3, count4, count5)
+            count0 = finalList[0]
+            count1 = finalList[1]
+            count2 = finalList[2]
+            count3 = finalList[3]
+            count4 = finalList[4]
+            count5 = finalList[5]
+        else:
+            finalList.append(count0)
+            finalList.append(count1)
+            finalList.append(count2)
+            finalList.append(count3)
+            finalList.append(count4)
+            finalList.append(count5) 
+        print('ELSECHECK:')
+        print(finalList)
+
+    return finalList
+
+
+def getRatingResult(c0, c1, c2, c3, c4, c5):    #get rating from interactions_test
     ratingList = getRating()
+    global getRatingRes
     #print(ratingList[:20])
     #need to find how many values have each rating value (0, 5)
-    count_0, count_1, count_2, count_3, count_4, count_5 = 0, 0, 0, 0, 0, 0
+    count_0, count_1, count_2, count_3, count_4, count_5 = c0, c1, c2, c3, c4, c5
     rateResult = []
     for rVal in ratingList:
         if rVal == 0.0:
@@ -291,7 +439,8 @@ def getRatingResult():    #get rating from interactions_test
     rateResult.append(count_3)
     rateResult.append(count_4)
     rateResult.append(count_5)
-
+    
+    getRatingRes = True
     return rateResult
 
 def getRating():    #get rating from interactions_test
@@ -469,63 +618,95 @@ def writer(header, data, filename, option):
         csvfile.close()
 
 
-def update(filename):
+@app.route('/updateRow', methods=['POST'])
+def userUpdate():
+    global upCheck
+    rowNum = request.form['rowNum']
+    newVal = request.form['newVal']
+    update('datasets/interactions_test.csv', int(rowNum), newVal)
+    upCheck = True
+    return 'You updated the rating for a recipe. <br /> <a href="/">Back Home</a>'
+
+
+def update(filename, rowNum, newVal):
     with open(filename, newline="") as file:
         readData = [row for row in csv.DictReader(file)]
-        readData[0]['sex'] = 'female' 
+        readData[rowNum]['rating'] = newVal 
         file.close()
     readHeader = readData[0].keys()
     writer(readHeader, readData, filename, "update")
 
 
-def append(filename):
-    with open(filename, 'a', newline='') as file:
-        field = ['ID', 'Name', 'Age', 'sex', 'Status']
-        writer = csv.DictWriter(file, fieldnames = field)
+@app.route('/appendRow', methods=['POST'])
+def userAppend():
+    global appendNum
+    user_id = request.form['user_id']
+    rec_id = request.form['rec_id']
+    date = request.form['date']
+    rating = request.form['rating']
+    u_ = request.form['u_']
+    i_ = request.form['i_']
+    append('datasets/interactions_test.csv', user_id, rec_id, date, rating, u_, i_)
+    appendNum += 1
+    print(appendNum)
+    return 'You appended a row. <br /> <a href="/">Back Home</a>'
 
-        writer.writerow({'ID': "0054", 'Name': "Johny", 'Age': "54", 'sex': "male", 'Status': "single"})
+
+def append(filename, user_id, rec_id, date, rating, u_, i_):
+    with open(filename, 'a', newline='') as file:
+        field = ['user_id', 'recipe_id', 'date', 'rating', 'u', 'i']
+        writer = csv.DictWriter(file, fieldnames = field)
+        uidVal = user_id
+        ridVal = rec_id
+        dateVal = date
+        rateVal = rating
+        uVal = u_
+        iVal = i_
+
+        writer.writerow({'user_id': uidVal, 'recipe_id': ridVal, 'date': dateVal, 'rating': rateVal, 'u': uVal, 'i': iVal})
         file.close()
   
 
-def delete(filename):
+
+@app.route('/deleteRow', methods=['POST'])
+def userDelete():
+    user_id = request.form['user_id']
+    delete('datasets/interactions_test.csv', user_id)
+    return 'You deleted a row. <br /> <a href="/">Back Home</a>'
+
+
+def delete(filename, userid):
+    global originalLen, delCheck
     with open(filename, 'r') as inp, open('test1.csv', 'w') as out:
         writer = csv.writer(out)
         for row in csv.reader(inp):
-            if row[0] != "0000":
+            #if row[0] != "9999":
+            if row[0] != userid:
                 writer.writerow(row)
     os.rename('test1.csv', filename)
+    originalLen = getFileLength(filename)
+    delCheck = True
+    print(originalLen)
 
-#def update(csvFile,id,name,age,sex,status):
-#    with open('test.csv', 'w', newline='') as csvfile:
-#        fieldnames = ['id', 'name', 'age', 'sex', 'status']
-#        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
-#        writer.writeheader()
-#        writer.writerow({'id': '1111', 'name': 'Marvin', 'age': '50', 'sex': 'male', 'status': 'single'})
-#        writer.writerow({'id': '1786', 'name': 'Kieth', 'age': '52', 'sex': 'male', 'status': 'married'})
-#        writer.writerow({'id': '7857', 'name': 'Elizabeth', 'age': '22', 'sex': 'female', 'status': 'dating'})
+def getFileLength(filename):
+    with open(filename) as f:
+        templist = csv.DictReader(f)
+        return sum(1 for line in templist)
 
-#   edited_rows = []
-#     edits = {   # a dictionary of changes to make, find 'key' substitue with 'value'
-#         '0000, James, 18, male, single' : '0000, Cartman, 19, male, single'
 
-#         }
 
-#     with open('test.csv', 'rb') as file:
-#         reader = csv.reader(file)
-#         for row in reader:
-#             edited_row = row      #takes the row and copies it
-#             for key in edits.items(): #iterate through edits
-#                 edited_row = [ x.replace(key, value) for x in edited_row ] #changes values in row
-#             edited_rows.append(edited_row) # add the modified rows
-
-#     with open('test.csv', 'wb') as f: #Updates old file with new rows
-#         writer = csv.writer(f)
-#         writer.writerows(edited_rows) 
 
 if __name__=="__main__":
-    globalIngredient = getIngredients()
-    globalSteps = getSteps()
+    #globalIngredient = getIngredients()
+    globalIngredient = []
+    #globalSteps = getSteps()
+    globalSteps = []
+    #global interactLength
+    originalLen = getFileLength('datasets/interactions_test.csv')
+    #interactLength = getFileLength('datasets/interactions_test.csv')
+    print('here is interaction test first length:')
+    print(originalLen)
     app.run(debug=True)
 
 
