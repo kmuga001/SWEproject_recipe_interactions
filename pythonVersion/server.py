@@ -68,6 +68,14 @@ def findNames(category, input):
         print(searchResults)
         return searchResults
 
+@app.route('/savedrecipes/')
+def sendSavedRecipesPage():
+    return render_template('savedrecipes.html')
+
+@app.route('/update/')
+def sendUpdatePage():
+    return render_template('update.html')
+
 @app.route('/results1/')
 def sendResultPage():
     return render_template('results1.html')
@@ -112,35 +120,7 @@ def linearPlot():           #plot time vs ingredients
     plt.clf()
     return render_template("results1.html", graph=newplot_name)
     
-"""
-@app.route('/secondplot', methods = ['POST'])
-def barPlot():           #plot time vs rating
-    ratingVals = getRatingResult()
-    global count0, count1, count2, count3, count4, count5
-    count0 = str(ratingVals[0])
-    count1 = str(ratingVals[1])
-    count2 = str(ratingVals[2])
-    count3 = str(ratingVals[3])
-    count4 = str(ratingVals[4])
-    count5 = str(ratingVals[5])
-    #print(ratingVals)       
-    rateLabel = ['0.0','1.0','2.0','3.0','4.0','5.0']
-    #plt.bar(ratings, ingredients, color='blue')
-    plt.bar(rateLabel, ratingVals, color='blue')
-    plt.xlabel('Ratings (out of 5)')
-    plt.ylabel('# of recipes')
-    plt.title('second analytic')
-
-    newplot_name = "secondGraph" + str(time.time()) + ".png"
-
-    for filename in os.listdir('static/'):
-        if filename.startswith('secondGraph'):
-            os.remove('static/' + filename)
-
-    plt.savefig('static/' + newplot_name)
-    plt.clf()
-    return render_template("results2.html", graph=newplot_name, value0=count0, value1=count1, value2=count2, value3=count3, value4=count4, value5=count5)
-"""    
+    
 
 @app.route('/secondplot', methods = ['POST'])
 def barPlot():           #plot time vs rating
@@ -633,7 +613,9 @@ def userUpdate():
     newVal = request.form['newVal']
     update('datasets/interactions_test.csv', int(rowNum), newVal)
     upCheck = True
-    return 'You updated the rating for a recipe. <br /> <a href="/">Back Home</a>'
+    #return 'You updated the rating for a recipe. <br /> <a href="/">Back Home</a>'
+    returnValue = newVal
+    return render_template("update.html", updateValue=returnValue)
 
 
 def update(filename, rowNum, newVal):
@@ -657,7 +639,9 @@ def userAppend():
     append('datasets/interactions_test.csv', user_id, rec_id, date, rating, u_, i_)
     appendNum += 1
     print(appendNum)
-    return 'You appended a row. <br /> <a href="/">Back Home</a>'
+    #return 'You appended a row. <br /> <a href="/">Back Home</a>'
+    returnValue = date
+    return render_template("update.html", appendValue=returnValue)
 
 
 def append(filename, user_id, rec_id, date, rating, u_, i_):
@@ -680,7 +664,9 @@ def append(filename, user_id, rec_id, date, rating, u_, i_):
 def userDelete():
     user_id = request.form['user_id']
     delete('datasets/interactions_test.csv', user_id)
-    return 'You deleted a row. <br /> <a href="/">Back Home</a>'
+    returnValue = user_id
+    return render_template("update.html", deleteValue=returnValue)
+    #return 'You deleted a row. <br /> <a href="/">Back Home</a>'
 
 
 def delete(filename, userid):
