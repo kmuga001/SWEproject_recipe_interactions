@@ -47,10 +47,15 @@ def findNames(category, input):
         recipeList = csv.DictReader(iTests)
         searchResults = []
 
-        for recipe in recipeList:
-            if input == recipe[category]:
-                searchResults.append(recipe["name"])
-  
+        if input.isnumeric() == True:
+            for recipe in recipeList:
+                if input == recipe[category]:
+                    searchResults.append(recipe["name"])
+        else:
+            for recipe in recipeList:
+                if input in recipe[category]:
+                    searchResults.append(recipe["name"])
+
     
         print(searchResults)
         return searchResults
