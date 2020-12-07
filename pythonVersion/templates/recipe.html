@@ -13,10 +13,16 @@
               </button>
               <div class="menu-content">
                   <a href="./">Home</a>
-                  <a href="./top_recipes.html">Top Recipes</a>
+                  <!--<a href="./top_recipes.html">Top Recipes</a>
                   <a href="./under100cal.html">Under 100 Cal</a>
                   <a href="./searchhistory.html">Search History</a>
-                  <a href="./savedrecipes.html">Saved Recipes</a>
+                  <a href="./savedrecipes.html">Saved Recipes</a>-->
+                  <a href="./results1/">Analytic 1</a>
+                  <a href="./results2/">Analytic 2</a>
+                  <a href="./results3/">Analytic 3</a>
+                  <a href="./results4/">Analytic 4</a>
+                  <a href="./results5/">Analytic 5</a>
+                  <a href="./results6/">Analytic 6</a>
               </div>
       
           </div>
@@ -128,6 +134,37 @@
     color: black;
     }
     
+
+    .star{
+color:red;
+font-size: 2.0 rem;
+padding:0 1 rem;
+
+}
+
+.star::before{
+content: '\2606';
+cursor: pointer;
+}
+
+.star.clicked::before{
+content: '\2605';
+}
+
+
+input[type="submit"]
+{
+    color: white;
+    background-color: green;
+}
+.btn button
+{
+    color: white;
+    background-color: red;
+}
+
+
+
     </style>
 
     <body>
@@ -135,6 +172,28 @@
             Name:  <div id = "name"></div>
             ID #:  <div id = "id"></div>
         </h1>
+
+
+      <!--Rating Recipe and Comment section-->
+   <h4>Rate This Recipe!</h4>
+   
+   <div class = "Rating" data-rating = "1">
+   <span class = "star">&nbsp;</span>
+   <span class = "star">&nbsp;</span>
+   <span class = "star">&nbsp;</span>
+   <span class = "star">&nbsp;</span>
+   <span class = "star">&nbsp;</span>
+   </div>
+	 
+  <div class="comments">
+  <h4>Leave a Comment About the Recipe!</h4>
+   <form><textarea id = "title" placeholder='Add Your Comment Here!'rows="3" cols="40"></textarea></form>
+    <div class="btn">
+      <input type="submit" value='Comment' onclick="insert()">
+      <button id='cancel' onclick="cancel()">Cancel</button>
+    </div>
+<div id = "display" class = "commshow"></div>
+</div>
 
     </body>
 
@@ -145,5 +204,178 @@
         document.getElementById("name").innerText=name;
         document.getElementById("id").innerText=id;
     </script>
+
+
+<!--This is for the star rating-->
+<script>
+    document.addEventListener('DOMContentLoaded', function(){
+        let stars = document.querySelectorAll('.star');
+        stars.forEach(function(star){
+            star.addEventListener('click', setRating); 
+        });
+        
+        let rating = parseInt(document.querySelector('.stars').getAttribute('data-rating'));
+        let target = stars[rating - 1];
+        target.dispatchEvent(new MouseEvent('click'));
+    });
+
+    function setRating(ev){
+        let span = ev.currentTarget;
+        let stars = document.querySelectorAll('.star');
+        let match = false;
+        let rating = 0;
+        stars.forEach(function(star, index){
+            if(match){
+                star.classList.remove('clicked');
+            }else{
+                star.classList.add('clicked');
+            }
+      
+            if(star === span){
+                match = true;
+                rating = index + 1;
+            }
+        });
+        document.querySelector('.stars').setAttribute('data-rating', rating);
+    }
+    
+</script>
+
+<!--This is for Comment Box-->
+<script>
+var titles = [];
+var titleInput = document.getElementById("title");
+var messageBox = document.getElementById("display");
+
+function insert () {
+titles.push(titleInput.value);
+clearAndShow();
+}
+
+function cancel(){
+titleInput.value = "";
+
+}
+function clearAndShow ()
+{
+titleInput.value = "";
+messageBox.innerHTML = "";
+messageBox.innerHTML += " " + titles.join("<br/> ") + "<br/>";
+}
+</script>
+
+
+input[type="submit"]
+{
+    color: white;
+    background-color: green;
+}
+.btn button
+{
+    color: white;
+    background-color: red;
+}
+
+
+
+    </style>
+
+    <body>
+        <h1>
+            Name:  <div id = "name"></div>
+            ID #:  <div id = "id"></div>
+        </h1>
+
+
+      <!--Rating Recipe and Comment section-->
+   <h4>Rate This Recipe!</h4>
+   
+   <div class = "Rating" data-rating = "1">
+   <span class = "star">&nbsp;</span>
+   <span class = "star">&nbsp;</span>
+   <span class = "star">&nbsp;</span>
+   <span class = "star">&nbsp;</span>
+   <span class = "star">&nbsp;</span>
+   </div>
+	 
+  <div class="comments">
+  <h4>Leave a Comment About the Recipe!</h4>
+   <form><textarea id = "title" placeholder='Add Your Comment Here!'rows="3" cols="40"></textarea></form>
+    <div class="btn">
+      <input type="submit" value='Comment' onclick="insert()">
+      <button id='cancel' onclick="cancel()">Cancel</button>
+    </div>
+<div id = "display" class = "commshow"></div>
+</div>
+
+    </body>
+
+    <script>
+        var list = JSON.parse('{{ results | safe }}')
+        var name = list[0]["Name"]
+        var id = list[0]["ID"]
+        document.getElementById("name").innerText=name;
+        document.getElementById("id").innerText=id;
+    </script>
+
+
+<!--This is for the star rating-->
+<script>
+    document.addEventListener('DOMContentLoaded', function(){
+        let stars = document.querySelectorAll('.star');
+        stars.forEach(function(star){
+            star.addEventListener('click', setRating); 
+        });
+        
+        let rating = parseInt(document.querySelector('.stars').getAttribute('data-rating'));
+        let target = stars[rating - 1];
+        target.dispatchEvent(new MouseEvent('click'));
+    });
+
+    function setRating(ev){
+        let span = ev.currentTarget;
+        let stars = document.querySelectorAll('.star');
+        let match = false;
+        let rating = 0;
+        stars.forEach(function(star, index){
+            if(match){
+                star.classList.remove('clicked');
+            }else{
+                star.classList.add('clicked');
+            }
+      
+            if(star === span){
+                match = true;
+                rating = index + 1;
+            }
+        });
+        document.querySelector('.stars').setAttribute('data-rating', rating);
+    }
+    
+</script>
+
+<!--This is for Comment Box-->
+<script>
+var titles = [];
+var titleInput = document.getElementById("title");
+var messageBox = document.getElementById("display");
+
+function insert () {
+titles.push(titleInput.value);
+clearAndShow();
+}
+
+function cancel(){
+titleInput.value = "";
+
+}
+function clearAndShow ()
+{
+titleInput.value = "";
+messageBox.innerHTML = "";
+messageBox.innerHTML += " " + titles.join("<br/> ") + "<br/>";
+}
+</script>
+
 
 </html>

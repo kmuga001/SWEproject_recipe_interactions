@@ -36,28 +36,24 @@ def home():
 
 @app.route('/recipe/<Name>',methods = ['POST', 'GET'])
 def buildRecipePage(Name):
-    items = parser('test.csv')
-    results = findRow("Name",items,Name)
+    items = parser('newtest.csv')
+    results = findRow("name",items,Name)
     print(results)
     return render_template('recipe.html', results = json.dumps(results))
 
 
-def findNames(category, items, input):
-    c = []
-    searchedItems = []
-    index = items[0].index(category)
-    name = items[0].index("Name")
+def findNames(category, input):
+    with open('newtest.csv') as iTests:
+        recipeList = csv.DictReader(iTests)
+        searchResults = []
+
+        for recipe in recipeList:
+            if input == recipe[category]:
+                searchResults.append(recipe["name"])
+  
     
-    c = [sub[index] for sub in items]
-    n = [sub[name] for sub in items]
-    c.pop(0)
-    n.pop(0)
-
-    for i in range(len(c)):
-        if c[i] == input:
-            searchedItems.append(n[i])
-
-    return searchedItems
+        print(searchResults)
+        return searchResults
 
 @app.route('/results1/')
 def sendResultPage():
@@ -515,10 +511,9 @@ def searchingInput():
     category = request.form['search_category']
     if len(category) == 0:
         return "Error, need a category. Return and try again."
-
+    
     #search through category for input. 
-    items = parser('test.csv')
-    results = findNames(category, items, search_value)
+    results = findNames(category, search_value)
     s = json.dumps(results)
     return render_template('index.html', results=s)
 
@@ -705,8 +700,6 @@ if __name__=="__main__":
     #global interactLength
     originalLen = getFileLength('datasets/interactions_test.csv')
     #interactLength = getFileLength('datasets/interactions_test.csv')
-    print('here is interaction test first length:')
-    print(originalLen)
     app.run(debug=True)
 
 
