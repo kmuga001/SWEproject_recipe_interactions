@@ -123,10 +123,11 @@ color: black;
         </button>
         <div class="menu-content">
             <a href="./">Home</a>
-            <a href="./toprecipes.html">Top Recipes</a>
+            <!--<a href="./toprecipes.html">Top Recipes</a>
             <a href="./under100cal.html">Under 100 Cal</a>
             <a href="./searchhistory.html">Search History</a>
-            <a href="./savedrecipes.html">Saved Recipes</a>
+            <a href="./savedrecipes.html">Saved Recipes</a>-->
+            <a href="./savedrecipes/">Saved Recipes</a>
             <a href="./results1/">Analytic 1</a>
             <a href="./results2/">Analytic 2</a>
             <a href="./results3/">Analytic 3</a>
@@ -156,14 +157,24 @@ color: black;
         <img src = "https://www.tasteofhome.com/wp-content/uploads/2018/01/exps174202_LR153742D08_04_3b-696x696.jpg" style = "width:128px;height:128px;">
         <img src = "https://food.fnr.sndimg.com/content/dam/images/food/fullset/2011/2/4/1/RX-FNM_030111-Lighten-Up-012_s4x3.jpg.rend.hgtvcom.616.462.suffix/1382539856907.jpeg" style = "width:128px;height:128px;">
     </div>    
-	    
+        
+    <br/><br/>
     <div id="search check"></div>
     
 
     <!--This is for the search button-->
     <form action="/search" method="post">
-        Category: <input type="text" placeholder="..." name="search_category"> <br />
-        Input: <input type="text" placeholder ="..." name="search_value"> <br />
+       <!--Previous on this line--> <!--Category: <input type="text" placeholder="..." name="search_category">-->
+        <!--Added-->
+        <select name="search_category">
+            <option value="name">Name</option>
+            <option value="id">ID</option>
+            <option value="minutes">Minutes</option>
+            <option value="n_steps">Steps</option>
+            <option value="n_ingredients">Ingredients</option>
+          </select>
+       <!--Added Above-->
+           <input type="text" placeholder ="..." name="search_value"> 
 
         <input type="submit" name="form" value="search" />  <br/>
 
@@ -181,6 +192,18 @@ color: black;
         <label>To save a specific recipe, please input that recipe's id: </label>
         <input type="text" placeholder="input the recipe id..." name="savedRecipe_id"/>
         <input type="submit" name="form" value="submit" />
+    
+        <!--Added-->
+        <section>
+            <span>Would you like to add to saved recipes?</span>
+            <br>
+            <input type="radio" name="save" id="yes" value="yes">
+            <label for="yes">Yes</label>
+            <input type="radio" name="save" id="no" value="no">
+            <label for="no">No</label>
+          </section>
+        <!--Added Above-->
+
     </form>
  
 

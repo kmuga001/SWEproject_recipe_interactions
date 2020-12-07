@@ -34,12 +34,20 @@ def home():
     return render_template("index.html")
 
 
-@app.route('/recipe/<Name>',methods = ['POST', 'GET'])
-def buildRecipePage(Name):
-    items = parser('newtest.csv')
-    results = findRow("name",items,Name)
-    print(results)
-    return render_template('recipe.html', results = json.dumps(results))
+@app.route('/recipe/<name>',methods = ['POST', 'GET'])
+def buildRecipePage(name):
+    with open('newtest.csv') as iTests:
+        recipelist = csv.DictReader(iTests)
+        for recipe in recipelist:
+            if name == recipe["name"]:
+                print(recipe)
+                result = recipe
+                steps = result["steps"]
+                ingredients = result["ingredients"]
+                break  
+        del result["steps"]
+        del result["ingredients"]
+        return render_template('recipe.html', results = json.dumps(result), steps = json.dumps(steps), ingredients = json.dumps(ingredients))
 
 
 def findNames(category, input):

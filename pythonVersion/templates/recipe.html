@@ -12,17 +12,13 @@
                   <i class="fa fa-caret-down"></i>
               </button>
               <div class="menu-content">
-                  <a href="./">Home</a>
-                  <!--<a href="./top_recipes.html">Top Recipes</a>
-                  <a href="./under100cal.html">Under 100 Cal</a>
-                  <a href="./searchhistory.html">Search History</a>
-                  <a href="./savedrecipes.html">Saved Recipes</a>-->
-                  <a href="./results1/">Analytic 1</a>
-                  <a href="./results2/">Analytic 2</a>
-                  <a href="./results3/">Analytic 3</a>
-                  <a href="./results4/">Analytic 4</a>
-                  <a href="./results5/">Analytic 5</a>
-                  <a href="./results6/">Analytic 6</a>
+                  <a href="http://localhost:5000/"></html>Home</a>
+                  <a href="http://localhost:5000/results1/">Analytic 1</a>
+                  <a href="http://localhost:5000/results2/">Analytic 2</a>
+                  <a href="http://localhost:5000/results3/">Analytic 3</a>
+                  <a href="http://localhost:5000/results4/">Analytic 4</a>
+                  <a href="http://localhost:5000/results5/">Analytic 5</a>
+                  <a href="http://localhost:5000/results6/">Analytic 6</a>
               </div>
       
           </div>
@@ -135,7 +131,7 @@
     }
     
 
-    .star{
+.star{
 color:red;
 font-size: 2.0 rem;
 padding:0 1 rem;
@@ -152,6 +148,22 @@ content: '\2605';
 }
 
 
+.stars{
+
+    counter-reset: rate 0;
+    font-size: 1.0rem;
+    font-weight: 900;
+    
+}
+
+.star.clicked{
+    counter-increment: rate 1;
+}
+
+.stars::after{
+    content: counter(rate) '/5';
+}
+
 input[type="submit"]
 {
     color: white;
@@ -164,50 +176,69 @@ input[type="submit"]
 }
 
 
-
     </style>
 
     <body>
-        <h1>
-            Name:  <div id = "name"></div>
-            ID #:  <div id = "id"></div>
-        </h1>
+        <h1><div id = "name"></div></h1>
+        <h2>ID</h2> <div id = "id"></div>
+        <br/>
+        <h2>Steps</h2> <div id = "steps"></div>
+        <br/>
+        <h2>Description</h2> <div id = "description"></div>
+        <br/>
+        <h2>Ingredients</h2><div id = "ingredients"></div>
+        <br/>
+        <h2>Nutrition</h2><div id = "nutrition"></div>
 
-
-      <!--Rating Recipe and Comment section-->
-   <h4>Rate This Recipe!</h4>
-   
-   <div class = "Rating" data-rating = "1">
-   <span class = "star">&nbsp;</span>
-   <span class = "star">&nbsp;</span>
-   <span class = "star">&nbsp;</span>
-   <span class = "star">&nbsp;</span>
-   <span class = "star">&nbsp;</span>
-   </div>
-	 
-  <div class="comments">
-  <h4>Leave a Comment About the Recipe!</h4>
-   <form><textarea id = "title" placeholder='Add Your Comment Here!'rows="3" cols="40"></textarea></form>
-    <div class="btn">
-      <input type="submit" value='Comment' onclick="insert()">
-      <button id='cancel' onclick="cancel()">Cancel</button>
+    
+          <!--Rating Recipe and Comment section-->
+       <h4>Rate This Recipe!</h4>
+       
+       <div class = "stars" data-rating = "1">
+       <span class = "star">&nbsp;</span>
+       <span class = "star">&nbsp;</span>
+       <span class = "star">&nbsp;</span>
+       <span class = "star">&nbsp;</span>
+       <span class = "star">&nbsp;</span>
+       </div>
+         
+      <div class="comments">
+      <h4>Leave a Comment About the Recipe!</h4>
+       <form><textarea id = "title" placeholder='Add Your Comment Here!'rows="3" cols="40"></textarea></form>
+        <div class="btn">
+          <input type="submit" value='Comment' onclick="insert()">
+          <button id='cancel' onclick="cancel()">Cancel</button>
+        </div>
+    <div id = "display" class = "commshow"></div>
     </div>
-<div id = "display" class = "commshow"></div>
-</div>
-
+    
     </body>
+   
+   <script>
+        //name,id,minutes,contributor_id,submitted,nutrition,n_steps,steps,description,ingredients,n_ingredients
+        var results = JSON.parse('{{ results | safe }}');
+        document.getElementById("name").innerText = results.name;
+        document.getElementById("id").innerText = results.id; 
+        document.getElementById("description").innerText = results.description;
+        document.getElementById("nutrition").innerText = results.nutrition;
+  
+    </script>
 
     <script>
-        var list = JSON.parse('{{ results | safe }}')
-        var name = list[0]["Name"]
-        var id = list[0]["ID"]
-        document.getElementById("name").innerText=name;
-        document.getElementById("id").innerText=id;
+        var steps ={{steps|safe}};
+        var ingredients = {{ingredients|safe}};
+        console.log(steps);
+        document.getElementById("steps").innerText = steps;
+        document.getElementById("ingredients").innerText = ingredients;
+
     </script>
+
+
 
 
 <!--This is for the star rating-->
 <script>
+
     document.addEventListener('DOMContentLoaded', function(){
         let stars = document.querySelectorAll('.star');
         stars.forEach(function(star){
@@ -223,7 +254,7 @@ input[type="submit"]
         let span = ev.currentTarget;
         let stars = document.querySelectorAll('.star');
         let match = false;
-        let rating = 0;
+        let number = 0;
         stars.forEach(function(star, index){
             if(match){
                 star.classList.remove('clicked');
@@ -233,148 +264,35 @@ input[type="submit"]
       
             if(star === span){
                 match = true;
-                rating = index + 1;
+                number = index + 1;
             }
         });
-        document.querySelector('.stars').setAttribute('data-rating', rating);
+        document.querySelector('.stars').setAttribute('data-rating', number);
     }
     
 </script>
 
 <!--This is for Comment Box-->
 <script>
-var titles = [];
-var titleInput = document.getElementById("title");
-var messageBox = document.getElementById("display");
+    var titles = [];
+    var titleInput = document.getElementById("title");
+    var messageBox = document.getElementById("display");
 
-function insert () {
-titles.push(titleInput.value);
-clearAndShow();
-}
-
-function cancel(){
-titleInput.value = "";
-
-}
-function clearAndShow ()
-{
-titleInput.value = "";
-messageBox.innerHTML = "";
-messageBox.innerHTML += " " + titles.join("<br/> ") + "<br/>";
-}
-</script>
-
-
-input[type="submit"]
-{
-    color: white;
-    background-color: green;
-}
-.btn button
-{
-    color: white;
-    background-color: red;
-}
-
-
-
-    </style>
-
-    <body>
-        <h1>
-            Name:  <div id = "name"></div>
-            ID #:  <div id = "id"></div>
-        </h1>
-
-
-      <!--Rating Recipe and Comment section-->
-   <h4>Rate This Recipe!</h4>
-   
-   <div class = "Rating" data-rating = "1">
-   <span class = "star">&nbsp;</span>
-   <span class = "star">&nbsp;</span>
-   <span class = "star">&nbsp;</span>
-   <span class = "star">&nbsp;</span>
-   <span class = "star">&nbsp;</span>
-   </div>
-	 
-  <div class="comments">
-  <h4>Leave a Comment About the Recipe!</h4>
-   <form><textarea id = "title" placeholder='Add Your Comment Here!'rows="3" cols="40"></textarea></form>
-    <div class="btn">
-      <input type="submit" value='Comment' onclick="insert()">
-      <button id='cancel' onclick="cancel()">Cancel</button>
-    </div>
-<div id = "display" class = "commshow"></div>
-</div>
-
-    </body>
-
-    <script>
-        var list = JSON.parse('{{ results | safe }}')
-        var name = list[0]["Name"]
-        var id = list[0]["ID"]
-        document.getElementById("name").innerText=name;
-        document.getElementById("id").innerText=id;
-    </script>
-
-
-<!--This is for the star rating-->
-<script>
-    document.addEventListener('DOMContentLoaded', function(){
-        let stars = document.querySelectorAll('.star');
-        stars.forEach(function(star){
-            star.addEventListener('click', setRating); 
-        });
-        
-        let rating = parseInt(document.querySelector('.stars').getAttribute('data-rating'));
-        let target = stars[rating - 1];
-        target.dispatchEvent(new MouseEvent('click'));
-    });
-
-    function setRating(ev){
-        let span = ev.currentTarget;
-        let stars = document.querySelectorAll('.star');
-        let match = false;
-        let rating = 0;
-        stars.forEach(function(star, index){
-            if(match){
-                star.classList.remove('clicked');
-            }else{
-                star.classList.add('clicked');
-            }
-      
-            if(star === span){
-                match = true;
-                rating = index + 1;
-            }
-        });
-        document.querySelector('.stars').setAttribute('data-rating', rating);
+    function insert () {
+    titles.push(titleInput.value);
+    clearAndShow();
     }
-    
-</script>
 
-<!--This is for Comment Box-->
-<script>
-var titles = [];
-var titleInput = document.getElementById("title");
-var messageBox = document.getElementById("display");
+    function cancel(){
+    titleInput.value = "";
 
-function insert () {
-titles.push(titleInput.value);
-clearAndShow();
-}
-
-function cancel(){
-titleInput.value = "";
-
-}
-function clearAndShow ()
-{
-titleInput.value = "";
-messageBox.innerHTML = "";
-messageBox.innerHTML += " " + titles.join("<br/> ") + "<br/>";
-}
+    }
+    function clearAndShow ()
+    {
+    titleInput.value = "";
+    messageBox.innerHTML = "";
+    messageBox.innerHTML += " " + titles.join("<br/> ") + "<br/>";
+    }
 </script>
 
 
