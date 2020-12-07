@@ -176,21 +176,27 @@ input[type="submit"]
 }
 
 
-    </style>
+ </style>
 
     <body>
         <h1><div id = "name"></div></h1>
         <h2>ID</h2> <div id = "id"></div>
         <br/>
+        <hr width = "20%" color = "black">
         <h2>Steps</h2> <div id = "steps"></div>
         <br/>
+        <hr width = "20%" color = "black">
         <h2>Description</h2> <div id = "description"></div>
         <br/>
+        <hr width = "20%" color = "black">
         <h2>Ingredients</h2><div id = "ingredients"></div>
         <br/>
+        <hr width = "20%" color = "black">
         <h2>Nutrition</h2><div id = "nutrition"></div>
+        <br/>
+        <hr width = "20%" color = "black">
 
-    
+        <br/><br/>
           <!--Rating Recipe and Comment section-->
        <h4>Rate This Recipe!</h4>
        
@@ -218,7 +224,7 @@ input[type="submit"]
         //name,id,minutes,contributor_id,submitted,nutrition,n_steps,steps,description,ingredients,n_ingredients
         var results = JSON.parse('{{ results | safe }}');
         document.getElementById("name").innerText = results.name;
-        document.getElementById("id").innerText = results.id; 
+        document.getElementById("id").innerText = "ID: " + results.id; 
         document.getElementById("description").innerText = results.description;
         document.getElementById("nutrition").innerText = results.nutrition;
   
@@ -228,7 +234,7 @@ input[type="submit"]
         var steps ={{steps|safe}};
         var ingredients = {{ingredients|safe}};
         console.log(steps);
-        document.getElementById("steps").innerText = steps;
+        document.getElementById("steps").innerText = steps ;
         document.getElementById("ingredients").innerText = ingredients;
 
     </script>
