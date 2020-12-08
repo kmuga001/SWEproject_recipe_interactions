@@ -32,17 +32,22 @@
     body {
         font-family: "Lato", sans-serif;
         text-align:center;
-        color: #000000
+        color: white;
     }
     .mySlides {
         display: none
     }
 
+
     h1 {
-        color: black;
+        color: white;
+        font-family:cursive;
         font-size: xx-large;
     }
-    
+    h2 {
+        color: white;
+        
+    }
     
     .navigation {
         background-color: black;
@@ -108,6 +113,14 @@ background-color: white;
 color: black;
 }
 
+
+#result_urls{
+    color:white;
+    }
+
+
+
+
 </style>
 
 
@@ -147,15 +160,36 @@ color: black;
 <body>
         
 	<style>
-     body {background-color:rgb(159, 155, 219)}
+     body 
+      {
+        background-image: url("https://www.flavorofindia.com/wp-content/uploads/2014/07/photodune-6761938-food-background-on-dark-slate-m1-1024x1024.jpg");
+        background-position: center;
+        background-size: cover;
+        height: 100%;
+      }
+
+ a:link {
+  color: #ffffff;
+}
+a {
+  outline: none;
+  text-decoration: none;
+  padding: 2px 1px 0;
+}
+a:hover {
+  border-bottom: 1px solid;     
+  background: #09aa8f;
+}
+
+
     </style>
 
     
     <div>
         <h1>HOME PAGE</h1>
-        <h2>Featured Recipes</h2>
-        <img src = "https://www.inspiredtaste.net/wp-content/uploads/2018/10/Homemade-Vegetable-Soup-Recipe-2-1200.jpg" style="width:128px;height:128px;">
-        <img src = "https://www.tasteofhome.com/wp-content/uploads/2018/01/exps174202_LR153742D08_04_3b-696x696.jpg" style = "width:128px;height:128px;">
+        <h2>~Featured Recipes~</h2>
+        <img src = "https://www.inspiredtaste.net/wp-content/uploads/2018/10/Homemade-Vegetable-Soup-Recipe-2-1200.jpg" style="width:128px;height:128px;"> &nbsp;&nbsp;&nbsp;
+        <img src = "https://www.tasteofhome.com/wp-content/uploads/2018/01/exps174202_LR153742D08_04_3b-696x696.jpg" style = "width:128px;height:128px;"> &nbsp;&nbsp;&nbsp;
         <img src = "https://food.fnr.sndimg.com/content/dam/images/food/fullset/2011/2/4/1/RX-FNM_030111-Lighten-Up-012_s4x3.jpg.rend.hgtvcom.616.462.suffix/1382539856907.jpeg" style = "width:128px;height:128px;">
     </div>    
         
@@ -178,9 +212,10 @@ color: black;
            <input type="text" placeholder ="..." name="search_value"> 
 
         <input type="submit" name="form" value="search" />  <br/>
-
-        <div id = "result_urls"></div>
+        <br/>
         
+        <div id = "result_urls"></div>
+
     </form>
 
 
@@ -266,9 +301,7 @@ color: black;
 
     }
     document.getElementById("result_urls").innerHTML = list;
-
-    
-    
+  
 </script> 
 
 </html>
