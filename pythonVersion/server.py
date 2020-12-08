@@ -535,8 +535,8 @@ def saveRecipe():
         str_result_str += ' '
 
 
-    return 'You searched for a recipe with id: %s <br /> Here is the information of the recipe that you saved: %s <br /> <a href="/">Back Home</a>' % (r_id, str_result_str)
-
+    #return 'You searched for a recipe with id: %s <br /> Here is the information of the recipe that you saved: %s <br /> <a href="/">Back Home</a>' % (r_id, str_result_str)
+    return render_template("savedrecipes.html", savedResult=str_result_str)
 
 
 @app.route('/clear', methods=['POST'])
@@ -544,8 +544,10 @@ def clearSavedRecipes():
     file_clear = open('saved.csv','w')
     file_clear.truncate()
     file_clear.close()
+    str_result_str = "Your saved recipes are cleared!"
 
-    return 'You cleared your saved recipes. <br /> <a href="/">Back Home</a>'
+    #return 'You cleared your saved recipes. <br /> <a href="/">Back Home</a>'
+    return render_template("savedrecipes.html", clearMessage=str_result_str)
 
 
 def getRecipeInfo(r_id, recipe_col, items):
@@ -605,26 +607,52 @@ def writer(header, data, filename, option):
             print("Option is not known")
         csvfile.close()
 
-
 @app.route('/updateRow', methods=['POST'])
 def userUpdate():
     global upCheck
-    rowNum = request.form['rowNum']
+    userid = request.form['userid']
     newVal = request.form['newVal']
-    update('datasets/interactions_test.csv', int(rowNum), newVal)
-    upCheck = True
+    returnValue = "none"
+
+    rowNum = findUserRow(int(userid),'datasets/interactions_test.csv')
+
+    if rowNum == -1:
+        returnValue = "inputted user id does not exist."
+    else:
+        update('datasets/interactions_test.csv', int(rowNum), newVal)
+        returnValue = newVal
+        upCheck = True
     #return 'You updated the rating for a recipe. <br /> <a href="/">Back Home</a>'
-    returnValue = newVal
+    
     return render_template("update.html", updateValue=returnValue)
+
+
+def findUserRow(userid, filename):
+    with open(filename) as filen:
+        file_list = csv.DictReader(filen)
+        rowNumber = 0
+        for each_row in file_list:
+            currUser = int(each_row['user_id'])
+            if currUser == userid:
+                return rowNumber
+            else:
+                rowNumber += 1
+
+        rowNumber = -1
+        
+        return rowNumber
 
 
 def update(filename, rowNum, newVal):
     with open(filename, newline="") as file:
         readData = [row for row in csv.DictReader(file)]
+        #find rowNum by finding userid's row number
+        #rowNum = findUserRow(userid, filename)
         readData[rowNum]['rating'] = newVal 
         file.close()
     readHeader = readData[0].keys()
     writer(readHeader, readData, filename, "update")
+
 
 
 @app.route('/appendRow', methods=['POST'])

@@ -49,6 +49,13 @@
         
     }
     
+    ul{ 
+        display:inline-block;
+        border:1px solid rgb(201, 194, 99);
+        padding:20px;
+        background-color: black;
+    }
+    
     .navigation {
         background-color: black;
         overflow: hidden;
@@ -187,7 +194,7 @@ a:hover {
     
     <div>
         <h1>HOME PAGE</h1>
-        <h2>~Featured Recipes~</h2>
+        <h2>~Search Recipes~</h2>
         <img src = "https://www.inspiredtaste.net/wp-content/uploads/2018/10/Homemade-Vegetable-Soup-Recipe-2-1200.jpg" style="width:128px;height:128px;"> &nbsp;&nbsp;&nbsp;
         <img src = "https://www.tasteofhome.com/wp-content/uploads/2018/01/exps174202_LR153742D08_04_3b-696x696.jpg" style = "width:128px;height:128px;"> &nbsp;&nbsp;&nbsp;
         <img src = "https://food.fnr.sndimg.com/content/dam/images/food/fullset/2011/2/4/1/RX-FNM_030111-Lighten-Up-012_s4x3.jpg.rend.hgtvcom.616.462.suffix/1382539856907.jpeg" style = "width:128px;height:128px;">
@@ -195,6 +202,7 @@ a:hover {
         
     <br/><br/>
     <div id="search check"></div>
+
     
 
     <!--This is for the search button-->
@@ -213,8 +221,11 @@ a:hover {
 
         <input type="submit" name="form" value="search" />  <br/>
         <br/>
-        
-        <div id = "result_urls"></div>
+        <ul>
+            <div id = "result_urls"></div>
+        </ul>
+        <!--<div id = "result_urls"></div>-->
+
 
     </form>
 
@@ -222,14 +233,14 @@ a:hover {
     <br />
     <br />
 
-
-    <!--This is for the saved recipes-->
+    
+    <!--This is for the saved recipes
     <form action="/savings" method="post">
         <label>To save a specific recipe, please input that recipe's id: </label>
         <input type="text" placeholder="input the recipe id..." name="savedRecipe_id"/>
         <input type="submit" name="form" value="submit" />
-    
-        <!--Added-->
+    -->
+        <!--Added
         <section>
             <span>Would you like to add to saved recipes?</span>
             <br>
@@ -237,7 +248,8 @@ a:hover {
             <label for="yes">Yes</label> &nbsp;
             <input type="radio" name="save" id="no" value="no">
             <label for="no">No</label>
-          </section>
+          </section> 
+        -->
         <!--Added Above-->
 
     </form>
@@ -245,12 +257,12 @@ a:hover {
 
     <br />
 
-    <!--This is for the clearing all saved recipes-->
+    <!--This is for the clearing all saved recipes
     <form action="/clear" method="post">
         <label>clear your saved recipes: </label>
         <input type="submit" name="form" value="Clear Saved Recipes" />
     </form>
-
+    -->
     <br />
 
     <!--This is for appending a row

@@ -150,8 +150,48 @@ color: black;
     </div>    
     
     <p> *These are the recipes that you have saved for later.</p>
+
+    <!--This is for the saved recipes-->
+    <form action="/savings" method="post">
+        <label>To save a specific recipe, please input that recipe's id: </label>
+        <input type="text" placeholder="input the recipe id..." name="savedRecipe_id"/>
+        <input type="submit" name="form" value="submit" />
+
+        <!--<div id="printSaved"></div>-->
+        <p>Item Saved: {{ savedResult }}</p>
+
+
+        <br>
+    
+        <!--Added-->
+        <section>
+            <span>Would you like to add to saved recipes?</span>
+            <br>
+            <input type="radio" name="save" id="yes" value="yes">
+            <label for="yes">Yes</label> &nbsp;
+            <input type="radio" name="save" id="no" value="no">
+            <label for="no">No</label>
+          </section>
+        <!--Added Above-->
+
+    </form>
+ 
+
+    <br />
+
+    <!--This is for the clearing all saved recipes-->
+    <form action="/clear" method="post">
+        <label>clear your saved recipes: </label>
+        <input type="submit" name="form" value="Clear Saved Recipes" />
+    </form>
+
+    <br />
 	    
     
  </body>
+<!--
+ <script>
+     document.getElementById("printSaved").innerHTML = savedResult
+ </script>-->
 
     
