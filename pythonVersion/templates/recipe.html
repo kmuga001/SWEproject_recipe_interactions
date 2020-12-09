@@ -55,18 +55,32 @@
         body {
             font-family: "Lato", sans-serif;
             text-align:center;
-            color: #000000
+            color:azure;
         }
+
+        body 
+      {
+        background-image: url("https://www.flavorofindia.com/wp-content/uploads/2014/07/photodune-6761938-food-background-on-dark-slate-m1-1024x1024.jpg");
+        background-position: center;
+        background-size: cover;
+        height: 100%;
+      }
+        
         .mySlides {
             display: none
         }
     
         h1 {
-            color: black;
+            color: gold;
             font-size: xx-large;
+            font-family:cursive;
         }
 
-        
+        h3 {
+            color: gold;
+          
+        }
+
         .navigation {
             background-color: black;
             overflow: hidden;
@@ -124,12 +138,10 @@
             background-color: red;
          } 
          
-         body {background-color:rgb(159, 155, 219)}
         
-        
-    .navigation a:hover {
-    background-color: white;
-    color: black;
+        .navigation a:hover {
+        background-color: white;
+        color: black;
     }
     
 
@@ -182,21 +194,23 @@ input[type="submit"]
 
     <body>
         <h1><div id = "name"></div></h1>
-        <h2>ID</h2> <div id = "id"></div>
+        <div id = "id"></div>
         <br/>
-        <hr width = "20%" color = "black">
-        <h2>Steps</h2> <div id = "steps"></div>
+        <hr width = "20%" color = "white">
+        <h3>Steps</h3> <div id = "steps"></div>
         <br/>
-        <hr width = "20%" color = "black">
-        <h2>Description</h2> <div id = "description"></div>
+        <hr width = "20%" color = "white">
+        <h3>Description</h3> <div id = "description"></div>
         <br/>
-        <hr width = "20%" color = "black">
-        <h2>Ingredients</h2><div id = "ingredients"></div>
+        <hr width = "20%" color = "white">
+        <h3>Ingredients</h3><div id = "ingredients"></div>
         <br/>
-        <hr width = "20%" color = "black">
-        <h2>Nutrition</h2><div id = "nutrition"></div>
+        <hr width = "20%" color = "white">
+        <h3>Nutrition</h3>
+        <p> calories,total-fat,sugar,sodium,protein,saturated fat,carbohydrates</p>
+        <div id = "nutrition"></div>
         <br/>
-        <hr width = "20%" color = "black">
+        <hr width = "20%" color = "white">
 
         <br/><br/>
           <!--Rating Recipe and Comment section-->
@@ -216,6 +230,7 @@ input[type="submit"]
         <div class="btn">
           <input type="submit" value='Comment' onclick="insert()">
           <button id='cancel' onclick="cancel()">Cancel</button>
+          <br>
         </div>
     <div id = "display" class = "commshow"></div>
     </div>

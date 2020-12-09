@@ -28,14 +28,23 @@
         body {
             font-family: "Lato", sans-serif;
             text-align:center;
-            color: #000000
+            color: white;
         }
+
+        body 
+      {
+        background-image: url("https://images.creativemarket.com/0.1.0/ps/7358571/1820/1213/m1/fpnw/wm1/yhkghshrdewym9cqaf6dydfgaym5exkmox3demunpyzo6v0nfog8cwdotjqhyb1w-.jpg?1574657243&s=63f255806cf9d9dfa9c86f3d340cce03");
+        background-position: center;
+        background-size: cover;
+        height: 100%;
+      }
+
         .mySlides {
             display: none
         }
     
         h1 {
-            color: black;
+            color: white;
             font-size: xx-large;
         }
         
@@ -135,13 +144,12 @@
 
     <body>
 
-        <style>
-            body {background-color:rgb(159, 155, 219)}
-        </style>
+
 
         <h1>ANALYTIC 6 PAGE</h1>
-        <h2>Interaction between Users and Recipes</h2>
-        <p>This is the sixth analytics page.</p>
+        <!--<h2>Interaction between Users and Recipes</h2>
+        <p>This is the sixth analytics page.</p>-->
+        <h2>Distribution of Cooking Time (Minutes)</h2>
 
         <!--This is for visualizing plots-->
         <form action="/sixth" method="post">
@@ -154,11 +162,16 @@
         <img src="{{ url_for('static', filename=graph) }}" />
 
         <br />
+        <!--
         <p> <strong>Understanding the histogram:</strong> <br />
         This plot displays the distribution of the interaction seen between users and recipes. <br />
         From this plot, we can see that there is an even distribution of which recipes were observed by users. <br />
         This demonstrates that many recipes are accessible for viewing on this website.
         
+        </p>
+        -->
+        <p> <strong>Understanding the histogram:</strong> <br />
+            This plot displays the distribution of the number of minutes it takes to cook a recipe. <br />
         </p>
 
         <br />

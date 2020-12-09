@@ -28,17 +28,15 @@
             font-family: "Lato", sans-serif;
             text-align:center;
             color: white;
-
         }
 
         body 
       {
-        background-image: url("https://images.creativemarket.com/0.1.0/ps/7358571/1820/1213/m1/fpnw/wm1/yhkghshrdewym9cqaf6dydfgaym5exkmox3demunpyzo6v0nfog8cwdotjqhyb1w-.jpg?1574657243&s=63f255806cf9d9dfa9c86f3d340cce03");
+        background-image: url("https://images.creativemarket.com/0.1.0/ps/7358706/1820/1213/m1/fpnw/wm1/r4ejcddlzrzpyfjdouhnnkfgfjrjuy4xyhhcnkuxt3m6rh05n4fnjqlf92qwdpkn-.jpg?1574658759&s=bdcb7212acfc1980a7cfee59581e102a");
         background-position: center;
         background-size: cover;
         height: 100%;
       }
-        
 
 
         .mySlides {
@@ -128,6 +126,9 @@
                     </button>
                     <div class="menu-content">
                         <a href="http://localhost:5000/"></html>Home</a>
+                        <!--<a href="./top_recipes.html">Top Recipes</a>
+                        <a href="./under100cal.html">Under 100 Cal</a>
+                        <a href="./searchhistory.html">Search History</a>-->
                         <a href="http://localhost:5000/savedrecipes/">Saved Recipes</a>
                         <a href="http://localhost:5000/update/">Make an Update</a>
                         <a href="http://localhost:5000/results1/">Analytic 1</a>
@@ -147,29 +148,48 @@
 
 
     <body>
+        
 
-        <h1>ANALYTIC 1 PAGE</h1>
-        <h2>Distribution of # of Steps per Recipe</h2>
-        <p>This is the first analytics page.</p>
 
-        <!--This is for visualizing plots-->
-        <form action="/firstplot" method="post">
-            <p>Grabbing histogram plot: <br /></p>
-            <input type="submit" name="form" value="display plot" />
+        <h1>UPDATE RECIPE INTERACTION:</h1>
+ 
+        <!--This is for updating a value -->
+        <form action="/updateRow" method="post">
+            <label>Update: </label>
+            <!--<input type="text" placeholder="input the row number..." name="rowNum"/>-->
+            <input type="text" placeholder="input the user id..." name="userid"/>
+            <input type="text" placeholder="input new rating..." name="newVal"/>
+            <input type="submit" name="form" value="Update" />
         </form>
 
-        <p>HISTOGRAM:</p>
-        
-        <img src="{{ url_for('static', filename=graph) }}" />
-        
+        <p>Rating changed to: <i>{{ updateValue }}</i></p>
+
 
         <br />
-        <p> <strong>Understanding the histogram:</strong> <br />
-        This plot displays the distribution of the number of steps that are taken to cook the recipe. <br />
-        
-        </p>
+        <h1>ADD RECIPE INTERACTION:</h1>
+        <!--This is for appending a row-->
+        <form action="/appendRow" method="post">
+            <label>Add: </label>
+            <input type="text" placeholder="input the user id..." name="user_id"/>
+            <input type="text" placeholder="input the recipe id..." name="rec_id"/>
+            <input type="text" placeholder="input date (xxxx-xx-xx)..." name="date"/>
+            <input type="text" placeholder="input the rating..." name="rating"/>
+            <input type="text" placeholder="input u..." name="u_"/>
+            <input type="text" placeholder="input the i..." name="i_"/>
+            <input type="submit" name="form" value="Add" />
+        </form>
+        <p>Date added: <i>{{ appendValue }}</i></p>
+
 
         <br />
+        <h1>DELETE RECIPE INTERACTION:</h1>
+        <!--this is for deleting a row-->
+        <form action="/deleteRow" method="post">
+            <label>Delete: </label>
+            <input type="text" placeholder="input the user id..." name="user_id"/>
+            <input type="submit" name="form" value="Delete" />
+        </form>
+        <p>User ID that was deleted: <i>{{ deleteValue }}</i></p>
 
 
     </body>

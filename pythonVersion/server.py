@@ -104,12 +104,13 @@ def sendResult6Page():
 
 @app.route('/firstplot', methods = ['POST'])
 def linearPlot():           #plot time vs ingredients
-    #steps = getSteps()        
+    steps = getSteps()        
 
     plt.xlabel('# of Steps')
-    plt.title('first analytic')
-    plt.hist(globalSteps,density=True,bins=30)
-
+    plt.ylabel('frequency')
+    plt.title('first analytic - # of steps vs. frequency')
+    #plt.hist(globalSteps,density=True,bins=30)
+    plt.hist(steps,density=True,bins=30)
     newplot_name = "firstGraph" + str(time.time()) + ".png"
 
     for filename in os.listdir('static/'):
@@ -138,7 +139,7 @@ def barPlot():           #plot time vs rating
     plt.bar(rateLabel, ratingVals, color='blue')
     plt.xlabel('Ratings (out of 5)')
     plt.ylabel('# of recipes')
-    plt.title('second analytic')
+    plt.title('second analytic - rating value vs. # of recipes')
 
     newplot_name = "secondGraph" + str(time.time()) + ".png"
 
@@ -160,13 +161,15 @@ def barPlot():           #plot time vs rating
 
 @app.route('/thirdplot', methods = ['POST'])
 def boxPlot():           #plot time vs rating
-    #ingredients = getIngredients()        
+    ingredients = getIngredients()        
 
     #plt.plot(time,rating, 'g---')
     #plt.scatter(time, rating, s=area, c=colors, alpha=0.5)
     #plt.plot(ratings,ingredients,'o',color='black')
-    plt.boxplot(globalIngredient)
-    plt.title("range of ingredients")
+    #plt.boxplot(globalIngredient)
+    plt.ylabel('# of ingredients')
+    plt.boxplot(ingredients)
+    plt.title("analytic 3 - distribution of # of ingredients")
     
     newplot_name = "thirdGraph" + str(time.time()) + ".png"
 
@@ -184,7 +187,9 @@ def itemsPlot():
     xVals = getUserNums()
     plt.scatter(xVals, numItems)
     #plt.boxplot(numItems)
-    plt.title('number of recipes reviewed by users')
+    plt.xlabel('user id #')
+    plt.ylabel('# of recipes reviewed')
+    plt.title('analytic 4 - number of recipes reviewed by users')
 
     newplot_name = "fourthGraph" + str(time.time()) + ".png"
 
@@ -201,7 +206,9 @@ def numRatingPlot(): #how many 5 star ratings did eaach user give
     numFive = getFiveRatings()
     #plt.hist(numFive, density=True, bins=[0,20,40,60,80,100,120,140,160,180,200,220,240,260,280,300])
     #plt.hist(numFive, density=True, bins=15)
-    plt.title('total number of five star ratings user gave for a recipe')
+    plt.title('analytic 5 - distribution of total # of five star ratings given by user')
+    plt.xlabel('total # of 5 star ratings')
+    plt.ylabel('frequency')
     plt.hist(numFive, density=True, bins=[0,20,40,60,80,100,120,140,160,180,200,220,240,260,280,300])
     
     newplot_name = "fifthGraph" + str(time.time()) + ".png"
@@ -214,7 +221,30 @@ def numRatingPlot(): #how many 5 star ratings did eaach user give
     plt.clf()
     return render_template("results5.html", graph=newplot_name)
 
+@app.route('/sixth', methods = ['POST'])
+def timePlot():           #plot time vs ingredients
+    minutes = getMinutes()        
+    print(minutes)
+    plt.xlabel('# of Minutes')
+    plt.ylabel('frequency')
+    plt.title('sixth analytic - # of minutes vs. frequency')
+    #plt.hist(globalSteps,density=True,bins=30)
+    bins_list = [0,100,200,300,400,500,600,700,800,900,1000]
+    plt.hist(minutes,density=True,bins=bins_list)
+    
+    newplot_name = "sixthGraph" + str(time.time()) + ".png"
 
+    for filename in os.listdir('static/'):
+        if filename.startswith('sixthGraph'):
+            os.remove('static/' + filename)
+
+    plt.savefig('static/' + newplot_name)
+    plt.clf()
+    return render_template("results6.html", graph=newplot_name)
+
+
+
+"""
 @app.route('/sixth', methods = ['POST'])
 def interactPlot():
     items_interact = getInteractArray()
@@ -230,6 +260,21 @@ def interactPlot():
     plt.savefig('static/' + newplot_name)
     plt.clf()
     return render_template("results6.html", graph=newplot_name)
+"""
+
+def getMinutes():
+    #with open('datasets/RAW_recipes.csv') as grabsteps:
+    with open('newtest.csv') as grabmin:
+        allminList = csv.DictReader(grabmin)
+        minList = []
+
+        for mi in allminList:
+            minVal = int(mi['minutes'])
+            minList.append(minVal)
+            
+        
+        return minList
+
 
 def getTime():    #get time from RAW_recipes, prob not used right now
     with open('datasets/RAW_recipes.csv') as rawRecipes:
@@ -446,7 +491,8 @@ def getRating():    #get rating from interactions_test
         return ratingValList
 
 def getIngredients():
-    with open('datasets/RAW_recipes.csv') as ingredients:
+    #with open('datasets/RAW_recipes.csv') as ingredients:
+    with open('newtest.csv') as ingredients:
         ingredientsList = csv.DictReader(ingredients)
         numOfIngredients = []
         #for ingredient in ingredientsList:
@@ -466,7 +512,8 @@ def getIngredients():
 
 
 def getSteps():
-    with open('datasets/RAW_recipes.csv') as grabsteps:
+    #with open('datasets/RAW_recipes.csv') as grabsteps:
+    with open('newtest.csv') as grabsteps:
         allstepList = csv.DictReader(grabsteps)
         stepList = []
         #for ingredient in ingredientsList:
@@ -721,9 +768,9 @@ def getFileLength(filename):
 
 if __name__=="__main__":
     #globalIngredient = getIngredients()
-    globalIngredient = []
+    #globalIngredient = []
     #globalSteps = getSteps()
-    globalSteps = []
+    #globalSteps = []
     #global interactLength
     originalLen = getFileLength('datasets/interactions_test.csv')
     #interactLength = getFileLength('datasets/interactions_test.csv')
